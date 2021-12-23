@@ -37,29 +37,21 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
         {
 
             _midiStreamWriter
-                .WriteHeader(Formats.MultiSimultaneousTracks, 4);
-
-            _midiStreamWriter
+                .WriteHeader(Formats.MultiSimultaneousTracks, 4)
                 .WriteStartTrack()
                 .WriteTimeSignature(4, 4)
                 .WriteTempo(120)
-                .WriteEndTrack();
-
-            _midiStreamWriter
+                .WriteEndTrack()
                 .WriteStartTrack()
                 .WriteChangeInstrument(0, Instruments.ElectricPiano2)
                 .Wait(NoteDurations.HalfNote)
                 .WriteNote(0, new MidiNote() { Note = MidiNoteNumbers.E5, Velocity = 32, Duration = NoteDurations.HalfNote })
-                .WriteEndTrack();
-
-            _midiStreamWriter
+                .WriteEndTrack()
                 .WriteStartTrack()
                 .WriteChangeInstrument(1, Instruments.OrchestralHarp)
                 .Wait(NoteDurations.QuarterNote)
                 .WriteNote(1, new MidiNote() { Note = MidiNoteNumbers.G4, Velocity = 64, Duration = NoteDurations.HalfNoteDotted })
-                .WriteEndTrack();
-
-            _midiStreamWriter
+                .WriteEndTrack()
                 .WriteStartTrack()
                 .WriteChangeInstrument(2, Instruments.Bassoon)
                 .WriteNotes(2, new List<MidiNote>()

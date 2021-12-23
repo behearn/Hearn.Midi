@@ -25,7 +25,9 @@ namespace Hearn.Midi
 
         public MidiNoteNumbers Note { get; set; }
 
-        public long RemainingTime { get; set; }
+        public long StartTick { get; set; }
+
+        public long EndTick { get; set; }
 
     }
 }

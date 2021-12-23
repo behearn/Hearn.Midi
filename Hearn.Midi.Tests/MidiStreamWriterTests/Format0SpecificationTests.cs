@@ -53,6 +53,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
                 .WriteNote(1, new MidiNote() { Note = MidiNoteNumbers.G4, Velocity = 64, Duration = NoteDurations.HalfNoteDotted })
                 .Wait(NoteDurations.QuarterNote)
                 .WriteNote(0, new MidiNote() { Note = MidiNoteNumbers.E5, Velocity = 32, Duration = NoteDurations.HalfNote })
+                //Leave EndTrack to end playing notes in this test
                 .WriteEndTrack();
 
         }
@@ -244,6 +245,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
             //00 3C 00 running status
             //00 81 43 00
             //00 80 4C 00
+
             //Note : spec example has velocity (last byte) as 0x40 but we're writing 0x00
 
             _stream.Seek(61, SeekOrigin.Begin);
