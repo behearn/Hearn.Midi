@@ -24,6 +24,8 @@ namespace Hearn.Midi
         int _currentTrack = -1;
         long _trackStart;
         bool _streamIsOpen;
+        long _currentTick;
+        long _awaitedTick;
 
         List<PlayingNote> _playingNotes;
 
@@ -152,6 +154,8 @@ namespace Hearn.Midi
 
             _stream.WriteLong(0); //Placeholder for length
 
+            _currentTick = 0;
+            _awaitedTick = 0;
 
             return this;
         }
@@ -323,12 +327,17 @@ namespace Hearn.Midi
 
         }
 
-        public MidiStreamWriter WriteNote(byte channel, MidiNote midiNote, NoteDurations delta = 0)
+        public MidiStreamWriter WriteNote(byte channel, MidiNote midiNote)
         {
-            return WriteNote(channel, midiNote.Note, midiNote.Velocity, midiNote.Duration, delta);
+            return WriteNote(channel, midiNote.Note, midiNote.Velocity, midiNote.Duration);
         }
 
-        public MidiStreamWriter WriteNote(byte channel, MidiNoteNumbers note, byte velocity, NoteDurations length, NoteDurations delta = 0)
+        public MidiStreamWriter WriteNote(byte channel, MidiNoteNumbers note, byte velocity, NoteDurations length)
+        {
+            return WriteNote(channel, note, velocity, (long)length);
+        }
+
+        public MidiStreamWriter WriteNote(byte channel, MidiNoteNumbers note, byte velocity, long length)
         {
 
             if (_currentTrack == -1)
@@ -345,8 +354,8 @@ namespace Hearn.Midi
             {
                 throw new ArgumentException("velocity must be in the range 0..127");
             }
-
-            var deltaTime = UpdateTrackNotes(channel, (long)delta);
+            
+            var deltaTime = UpdateTick();
 
             var eventCode = (byte)(NOTE_ON_EVENT | channel);
 
@@ -366,7 +375,7 @@ namespace Hearn.Midi
 
         }
 
-        public MidiStreamWriter WriteNotes(byte channel, IEnumerable<MidiNote> midiNotes, NoteDurations delta = 0)
+        public MidiStreamWriter WriteNotes(byte channel, IEnumerable<MidiNote> midiNotes)
         {
             if (_currentTrack == -1)
             {
@@ -383,7 +392,7 @@ namespace Hearn.Midi
                 throw new ArgumentException("midiNotes not supplied");
             }
 
-            var deltaTime = UpdateTrackNotes(channel, (long)delta);
+            var deltaTime = UpdateTick();
 
             var eventCode = (byte)(NOTE_ON_EVENT | channel);
 
@@ -422,6 +431,18 @@ namespace Hearn.Midi
 
         }
 
+        public MidiStreamWriter Wait(NoteDurations duration)
+        {
+            _awaitedTick = _currentTick + (long)duration;
+            return this;
+        }
+
+        public MidiStreamWriter Wait(long duration)
+        {
+            _awaitedTick = _currentTick + duration;
+            return this;
+        }
+
         public void Flush()
         {
             _stream.Flush();
@@ -433,11 +454,13 @@ namespace Hearn.Midi
             _stream.Close();
         }
 
-        private long UpdateTrackNotes(int channel, long delta)
+        private long UpdateTick()
         {
 
-            var deltaTime = delta;
+            var deltaTime = _awaitedTick - _currentTick;
 
+            _currentTick = _awaitedTick;
+            
             var updateNotes = _playingNotes.Any();
             while (updateNotes)
             {
@@ -455,13 +478,17 @@ namespace Hearn.Midi
                 var stoppedNotes = _playingNotes.Where(x => x.RemainingTime == 0);
                 if (stoppedNotes.Any())
                 {
-                    var eventCode = (byte)(NOTE_OFF_EVENT | channel);
-                    _stream.WriteVariableLengthQuantity(deltaTime);
-                    _stream.WriteByte(eventCode);
-
+                    var lastChannel = 0;
                     var i = 0;
                     foreach (var stoppedNote in stoppedNotes)
                     {
+                        if (i == 0 || lastChannel != stoppedNote.Channel)
+                        {
+                            var eventCode = (byte)(NOTE_OFF_EVENT | stoppedNote.Channel);
+                            _stream.WriteVariableLengthQuantity(deltaTime);
+                            _stream.WriteByte(eventCode);
+                            lastChannel = stoppedNote.Channel;
+                        }
                         if (i > 0)
                         {
                             _stream.WriteVariableLengthQuantity(0x00); //Delta time
@@ -475,7 +502,6 @@ namespace Hearn.Midi
                 }
 
                 _playingNotes.RemoveAll(x => x.RemainingTime == 0);
-
 
                 updateNotes = _playingNotes.Where(x => x.RemainingTime < deltaTime).Any();
 

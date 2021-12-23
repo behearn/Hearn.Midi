@@ -48,13 +48,15 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
             _midiStreamWriter
                 .WriteStartTrack()
                 .WriteChangeInstrument(0, Instruments.ElectricPiano2)
-                .WriteNote(0, new MidiNote() { Note = MidiNoteNumbers.E5, Velocity = 32, Duration = NoteDurations.HalfNote }, NoteDurations.HalfNote)
+                .Wait(NoteDurations.HalfNote)
+                .WriteNote(0, new MidiNote() { Note = MidiNoteNumbers.E5, Velocity = 32, Duration = NoteDurations.HalfNote })
                 .WriteEndTrack();
 
             _midiStreamWriter
                 .WriteStartTrack()
                 .WriteChangeInstrument(1, Instruments.OrchestralHarp)
-                .WriteNote(1, new MidiNote() { Note = MidiNoteNumbers.G4, Velocity = 64, Duration = NoteDurations.HalfNoteDotted }, NoteDurations.QuarterNote)
+                .Wait(NoteDurations.QuarterNote)
+                .WriteNote(1, new MidiNote() { Note = MidiNoteNumbers.G4, Velocity = 64, Duration = NoteDurations.HalfNoteDotted })
                 .WriteEndTrack();
 
             _midiStreamWriter
