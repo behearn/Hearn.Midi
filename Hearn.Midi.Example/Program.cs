@@ -32,7 +32,8 @@ namespace Hearn.Midi.Example
                         .WriteTimeSignature(3, 4)
                         .WriteTempo(104)
                         .WriteString(StringTypes.TrackName, "Minuet in G")
-                        .WriteString(StringTypes.CopyrightNotice, "Johann Sebastian Bach")
+                        .WriteString(StringTypes.CopyrightNotice, "Christian Petzold")
+                        .WriteString(StringTypes.ArbitraryText, "From Johann Sebastian Bach's Notebook for Anna Magdalena Bach")
                     .WriteEndTrack();
 
                 midiStreamWriter
@@ -126,8 +127,99 @@ namespace Hearn.Midi.Example
                         .WriteNoteAndWait(0, MidiNoteNumbers.FSGF4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
                         //Measure 16
                         .WriteNoteAndWait(0, MidiNoteNumbers.G4, VELOCITY_MEZZO_PIANO, NoteDurations.HalfNoteDotted)
+                        //Measure 17
+                        .WriteNoteAndWait(0, MidiNoteNumbers.B5, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.G5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.A5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.B4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.G5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        //Measure 18
+                        .WriteNoteAndWait(0, MidiNoteNumbers.A5, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.D5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.E5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.FSGF5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.D5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        //Measure 19
+                        .WriteNoteAndWait(0, MidiNoteNumbers.G5, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.E5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.FSGF5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.G5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.D5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        //Measure 20
+                        .WriteNoteAndWait(0, MidiNoteNumbers.CSDF5, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.B4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.CSDF5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNote(0, MidiNoteNumbers.A4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        //Measure 21
+                        .WriteNoteAndWait(0, MidiNoteNumbers.A4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.B4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.CSDF5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.D5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.E5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.FSGF5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        //Measure 22
+                        .WriteNoteAndWait(0, MidiNoteNumbers.G5, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.FSGF5, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.E5, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        //Measure 23
+                        .WriteNote(0, MidiNoteNumbers.FSGF5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        .WriteNote(0, MidiNoteNumbers.A4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        .WriteNote(0, MidiNoteNumbers.CSDF5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        //Measure 24
+                        .WriteNoteAndWait(0, MidiNoteNumbers.D5, VELOCITY_MEZZO_PIANO, NoteDurations.HalfNoteDotted)
+                        //Measure 25
+                        .WriteNoteAndWait(0, MidiNoteNumbers.D5, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.G5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.FSGF5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNote(0, MidiNoteNumbers.G4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        //Measure 26
+                        .WriteNoteAndWait(0, MidiNoteNumbers.E5, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.G4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.FSGF4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNote(0, MidiNoteNumbers.G4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        //Measure 27
+                        .WriteNoteAndWait(0, MidiNoteNumbers.D5, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.C5, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.B4, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        //Measure 28
+                        .WriteNoteAndWait(0, MidiNoteNumbers.A4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.G4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.FSGF4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.G4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.A4, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        //Measure 29
+                        .WriteNoteAndWait(0, MidiNoteNumbers.D4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.E4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.FSGF4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.G4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.A4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.B4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        //Measure 30
+                        .WriteNoteAndWait(0, MidiNoteNumbers.C5, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.B4, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.A4, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        //Measure 31
+                        .WriteNoteAndWait(0, MidiNoteNumbers.B4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(0, MidiNoteNumbers.D5, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNote(0, MidiNoteNumbers.G4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        .WriteNote(0, MidiNoteNumbers.FSGF4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        //Measure 32
+                        .WriteNotes(0, new List<MidiNote>()
+                        {
+                            new MidiNote() { Note = MidiNoteNumbers.G4, Velocity = VELOCITY_MEZZO_PIANO, Duration = NoteDurations.HalfNoteDotted},
+                            new MidiNote() { Note = MidiNoteNumbers.D4, Velocity = VELOCITY_MEZZO_PIANO, Duration = NoteDurations.HalfNoteDotted},
+                            new MidiNote() { Note = MidiNoteNumbers.B3, Velocity = VELOCITY_MEZZO_PIANO, Duration = NoteDurations.HalfNoteDotted},
+                        })
+                        .Wait(NoteDurations.HalfNoteDotted)
                     .WriteEndTrack();
-
 
                 midiStreamWriter
                     .WriteStartTrack()
@@ -155,8 +247,8 @@ namespace Hearn.Midi.Example
                         .WriteNoteAndWait(1, MidiNoteNumbers.B3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
                         .WriteNoteAndWait(1, MidiNoteNumbers.G3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
                         //Measure 8
-                        .WriteNoteAndWait(1, MidiNoteNumbers.D3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
-                        .WriteNoteAndWait(1, MidiNoteNumbers.D2, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .WriteNoteAndWait(1, MidiNoteNumbers.D4, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(1, MidiNoteNumbers.D3, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
                         .WriteNoteAndWait(1, MidiNoteNumbers.C4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
                         .WriteNoteAndWait(1, MidiNoteNumbers.B3, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
                         .WriteNoteAndWait(1, MidiNoteNumbers.A3, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
@@ -189,6 +281,75 @@ namespace Hearn.Midi.Example
                         .WriteNoteAndWait(1, MidiNoteNumbers.D3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
                         //Measure 16
                         .WriteNoteAndWait(1, MidiNoteNumbers.G3, VELOCITY_MEZZO_PIANO, NoteDurations.HalfNote)
+                        .WriteNote(1, MidiNoteNumbers.G2, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        //Measure 17
+                        .WriteNoteAndWait(1, MidiNoteNumbers.G3, VELOCITY_MEZZO_PIANO, NoteDurations.HalfNoteDotted)
+                        //Measure 18
+                        .WriteNoteAndWait(1, MidiNoteNumbers.FSGF3, VELOCITY_MEZZO_PIANO, NoteDurations.HalfNoteDotted)
+                        //Measure 19
+                        .WriteNoteAndWait(1, MidiNoteNumbers.E3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(1, MidiNoteNumbers.G3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(1, MidiNoteNumbers.E3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        //Measure 20
+                        .WriteNoteAndWait(1, MidiNoteNumbers.A3, VELOCITY_MEZZO_PIANO, NoteDurations.HalfNote)
+                        .WriteNote(1, MidiNoteNumbers.A2, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        //Measure 21
+                        .WriteNoteAndWait(1, MidiNoteNumbers.A3, VELOCITY_MEZZO_PIANO, NoteDurations.HalfNoteDotted)
+                        //Measure 22
+                        .WriteNoteAndWait(1, MidiNoteNumbers.B3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(1, MidiNoteNumbers.D3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(1, MidiNoteNumbers.CSDF4, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        //Measure 23
+                        .WriteNote(1, MidiNoteNumbers.D4, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        .WriteNote(1, MidiNoteNumbers.FSGF3, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        .WriteNote(1, MidiNoteNumbers.A3, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        //Measure 24
+                        .WriteNoteAndWait(1, MidiNoteNumbers.D4, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(1, MidiNoteNumbers.D3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(1, MidiNoteNumbers.C4, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        //Measure 25
+                        .WriteNote(1, MidiNoteNumbers.G3, VELOCITY_MEZZO_PIANO, NoteDurations.HalfNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        .WriteNote(1, MidiNoteNumbers.D4, VELOCITY_MEZZO_PIANO, NoteDurations.HalfNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(1, MidiNoteNumbers.G3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        //Measure 26
+                        .WriteNote(1, MidiNoteNumbers.C4, VELOCITY_MEZZO_PIANO, NoteDurations.HalfNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        .WriteNote(1, MidiNoteNumbers.E4, VELOCITY_MEZZO_PIANO, NoteDurations.HalfNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(1, MidiNoteNumbers.C4, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        //Measure 27
+                        .WriteNoteAndWait(1, MidiNoteNumbers.G3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(1, MidiNoteNumbers.A3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(1, MidiNoteNumbers.B3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        //Measure 28
+                        .WriteNoteAndWait(1, MidiNoteNumbers.D4, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .Wait(NoteDurations.HalfNote)
+                        //Measure 29
+                        .WriteNote(1, MidiNoteNumbers.D3, VELOCITY_MEZZO_PIANO, NoteDurations.HalfNoteDotted)
+                        .Wait(NoteDurations.HalfNote)
+                        .WriteNoteAndWait(1, MidiNoteNumbers.FSGF3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        //Measure 30
+                        .WriteNoteAndWait(1, MidiNoteNumbers.E3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(1, MidiNoteNumbers.G3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNoteAndWait(1, MidiNoteNumbers.FSGF3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        //Measure 31
+                        .WriteNoteAndWait(1, MidiNoteNumbers.G3, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
+                        .WriteNote(1, MidiNoteNumbers.B2, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        .WriteNote(1, MidiNoteNumbers.D3, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        //Measure 32
+                        .WriteNote(1, MidiNoteNumbers.G3, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .Wait(NoteDurations.QuarterNote)
+                        .WriteNote(1, MidiNoteNumbers.D3, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
+                        .Wait(NoteDurations.QuarterNote)
                         .WriteNote(1, MidiNoteNumbers.G2, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
                         .Wait(NoteDurations.QuarterNote)
                     .WriteEndTrack();

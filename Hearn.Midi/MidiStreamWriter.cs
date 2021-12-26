@@ -430,7 +430,6 @@ namespace Hearn.Midi
             _stream.WriteVariableLengthQuantity(deltaTime);
             _stream.WriteByte(eventCode);
 
-
             var i = 0;
             foreach (var midiNote in midiNotes)
             {
@@ -442,7 +441,7 @@ namespace Hearn.Midi
 
                 if (i > 0)
                 {
-                    _stream.WriteVariableLengthQuantity(deltaTime);
+                    _stream.WriteVariableLengthQuantity(0x00); //Delta time
                 }
 
                 _stream.WriteByte((byte)midiNote.Note);
