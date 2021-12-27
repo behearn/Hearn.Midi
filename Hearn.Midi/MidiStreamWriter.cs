@@ -19,7 +19,7 @@ namespace Hearn.Midi
         const byte NOTE_OFF_EVENT = 0x80;
 
         Stream _stream;
-        int _tracks;
+        int _tracks = -1;
         int _lastTrack = 0;
         int _currentTrack = -1;
         long _trackStart;
@@ -98,14 +98,34 @@ namespace Hearn.Midi
             DoubleWholeNoteDotted = 1152
         }
 
+        /// <summary>
+        /// Creates a new MidiStreamWriter instance
+        /// </summary>
+        /// <param name="stream">An instance of an object derived from System.IO.Stream</param>
         public MidiStreamWriter(Stream stream)
         {
+            if (stream == null)
+            {
+                throw new ArgumentException("stream has not been instantiated");
+            }
+
+            if (!stream.CanWrite)
+            {
+                throw new ArgumentException("stream must be writable");
+            }
+
             _stream = stream;
             _streamIsOpen = true;
 
             _playingNotes = new List<PlayingNote>();
         }
 
+        /// <summary>
+        /// Writes the Midi file header.  Must be the first method called
+        /// </summary>
+        /// <param name="format">Indicates whether this is a single or multi track file</param>
+        /// <param name="tracks">Number of tracks</param>
+        /// <returns>Current MidiStreamWriter instance</returns>
         public MidiStreamWriter WriteHeader(Formats format, byte tracks)
         {
 
@@ -114,6 +134,11 @@ namespace Hearn.Midi
             if (tracks < 0)
             {
                 throw new ArgumentException("tracks cannot be less than zero");
+            }
+
+            if (format == Formats.SingleTrack && tracks != 1)
+            {
+                throw new ArgumentException("tracks must be 1 when format is SingleTrack");
             }
 
             var header = Encoding.ASCII.GetBytes("MThd");
@@ -130,11 +155,16 @@ namespace Hearn.Midi
         }
 
         /// <summary>
-        /// Start a track
+        /// Start a track.  Must be called after WriteHeader, or WriteEndTrack for multi track streams
         /// </summary>
-        /// <returns>Current MidiStreamWriter for fluent API</returns>
+        /// <returns>Current MidiStreamWriter instance</returns>
         public MidiStreamWriter WriteStartTrack()
         {
+            if (_tracks == -1)
+            {
+                throw new ArgumentException($"Create header before starting a new track");
+            }
+
             if (_currentTrack != -1)
             {
                 throw new ArgumentException($"End track {_currentTrack} before starting a new track");
@@ -161,9 +191,9 @@ namespace Hearn.Midi
         }
 
         /// <summary>
-        /// Ends the current track 
+        /// Ends the current track
         /// </summary>
-        /// <returns>Current MidiStreamWriter for fluent API</returns>
+        /// <returns>Current MidiStreamWriter instance</returns>
         public MidiStreamWriter WriteEndTrack()
         {
             if (_currentTrack == -1)
@@ -174,7 +204,7 @@ namespace Hearn.Midi
             if (_playingNotes.Any())
             {
                 _awaitedTick = _playingNotes.Max(x => x.EndTick);
-                UpdateCurrentTime();
+                StopPlayedNotes();
             }
 
             //Overwrite length placeholder with actual length
@@ -197,11 +227,11 @@ namespace Hearn.Midi
         }
 
         /// <summary>
-        /// Writes a string of text to a text meta event
+        /// Writes a string of text to a track
         /// </summary>
         /// <param name="stringType">Type of text meta event</param>
         /// <param name="text">Text to write</param>
-        /// <returns>Current MidiStreamWriter for fluent API</returns>
+        /// <returns>Current MidiStreamWriter instance</returns>
         public MidiStreamWriter WriteString(StringTypes stringType, string text)
         {
             if (_currentTrack == -1)
@@ -230,7 +260,7 @@ namespace Hearn.Midi
         /// Changes the tempo for the track (if not supplied MIDI will default to 120bpm)
         /// </summary>
         /// <param name="bpm">Beats per minute</param>
-        /// <returns>Current MidiStreamWriter for fluent API</returns>
+        /// <returns>Current MidiStreamWriter instance</returns>
         public MidiStreamWriter WriteTempo(int bpm)
         {
 
@@ -265,11 +295,11 @@ namespace Hearn.Midi
         }
 
         /// <summary>
-        /// Writes the time signature
+        /// Writes the time signature (if not supplied MIDI will default to 4/4 time)
         /// </summary>
         /// <param name="topNumber">Beats per bar</param>
         /// <param name="bottomNumber">Type of notes (MIDI spec dictates this must be a power of 2)</param>
-        /// <returns>Current MidiStreamWriter for fluent API</returns>
+        /// <returns>Current MidiStreamWriter instance</returns>
         public MidiStreamWriter WriteTimeSignature(byte topNumber, byte bottomNumber)
         {
             const byte MIDI_CLOCKS_PER_TICK = 24;
@@ -313,6 +343,12 @@ namespace Hearn.Midi
 
         }
 
+        /// <summary>
+        /// Changes the instrument for the supplied channel
+        /// </summary>
+        /// <param name="channel">channel number [0..15] (Note: channel 10 (value 9 as zero based) is reserved for percussion)</param>
+        /// <param name="instrument">instrument</param>
+        /// <returns>Current MidiStreamWriter instance</returns>
         public MidiStreamWriter WriteChangeInstrument(byte channel, Instruments instrument)
         {
 
@@ -338,30 +374,68 @@ namespace Hearn.Midi
 
         }
 
+        /// <summary>
+        /// Writes a note to a channel but does not tick over the current time.  Use Tick(length) to control the start time of further notes
+        /// </summary>
+        /// <param name="channel">channel number [0..15] (Note: channel 10 (value 9 as zero based) is reserved for percussion)</param>
+        /// <param name="midiNote">An instance of the MidiNote class</param>
+        /// <returns>Current MidiStreamWriter instance</returns>
         public MidiStreamWriter WriteNote(byte channel, MidiNote midiNote)
         {
             return WriteNote(channel, midiNote.Note, midiNote.Velocity, midiNote.Duration);
         }
 
-        public MidiStreamWriter WriteNoteAndWait(byte channel, MidiNoteNumbers note, byte velocity, NoteDurations length)
+        /// <summary>
+        /// Writes a note to a channel and ticks over the current time, stopping any playing notes due to end
+        /// </summary>
+        /// <param name="channel">channel number [0..15] (Note: channel 10 (value 9 as zero based) is reserved for percussion)</param>
+        /// <param name="note">note to play</param>
+        /// <param name="velocity">soft to loud [0..127]</param>
+        /// <param name="length">duration of the note</param>
+        /// <returns>Current MidiStreamWriter instance</returns>
+        public MidiStreamWriter WriteNoteAndTick(byte channel, MidiNoteNumbers note, byte velocity, NoteDurations length)
         {
             WriteNote(channel, note, velocity, (long)length);
-            Wait(length);
+            Tick(length);
             return this;
         }
 
-        public MidiStreamWriter WriteNoteAndWait(byte channel, MidiNoteNumbers note, byte velocity, long length)
+        /// <summary>
+        /// Writes a note to a channel and ticks over the current time, stopping any playing notes due to end
+        /// </summary>
+        /// <param name="channel">channel number [0..15] (Note: channel 10 (value 9 as zero based) is reserved for percussion)</param>
+        /// <param name="note">note to play</param>
+        /// <param name="velocity">soft to loud [0..127]</param>
+        /// <param name="length">duration of the note (see NoteDuration enum values)</param>
+        /// <returns>Current MidiStreamWriter instance</returns>
+        public MidiStreamWriter WriteNoteAndTick(byte channel, MidiNoteNumbers note, byte velocity, long length)
         {
             WriteNote(channel, note, velocity, length);
-            Wait(length);
+            Tick(length);
             return this;
         }
 
+        /// <summary>
+        /// Writes a note to a channel but does not tick over the current time.  Use Tick(length) to control the start time of further notes
+        /// </summary>
+        /// <param name="channel">channel number [0..15] (Note: channel 10 (value 9 as zero based) is reserved for percussion)</param>
+        /// <param name="note">note to play</param>
+        /// <param name="velocity">soft to loud [0..127]</param>
+        /// <param name="length">duration of the note</param>
+        /// <returns>Current MidiStreamWriter instance</returns>
         public MidiStreamWriter WriteNote(byte channel, MidiNoteNumbers note, byte velocity, NoteDurations length)
         {
             return WriteNote(channel, note, velocity, (long)length);
         }
 
+        /// <summary>
+        /// Writes a note to a channel but does not tick over the current time.  Use Tick(length) to control the start time of further notes
+        /// </summary>
+        /// <param name="channel">channel number [0..15] (Note: channel 10 (value 9 as zero based) is reserved for percussion)</param>
+        /// <param name="note"></param>
+        /// <param name="velocity">soft to loud [0..127]</param>
+        /// <param name="length">duration of the note (see NoteDuration enum values)</param>
+        /// <returns>Current MidiStreamWriter instance</returns>
         public MidiStreamWriter WriteNote(byte channel, MidiNoteNumbers note, byte velocity, long length)
         {
 
@@ -380,9 +454,9 @@ namespace Hearn.Midi
                 throw new ArgumentException("velocity must be in the range 0..127");
             }
 
-            UpdateCurrentTime();
+            StopPlayedNotes();
 
-            var deltaTime = UpdateDelta();
+            var deltaTime = CalculateDelta();
 
             var eventCode = (byte)(NOTE_ON_EVENT | channel);
 
@@ -404,6 +478,12 @@ namespace Hearn.Midi
 
         }
 
+        /// <summary>
+        /// Writes a group of notes to a channel but does not tick over the current time.  Use Tick(length) to control the start time of further notes
+        /// </summary>
+        /// <param name="channel">channel number [0..15] (Note: channel 10 (value 9 as zero based) is reserved for percussion)</param>
+        /// <param name="midiNotes">List of MidiNote instances to play</param>
+        /// <returns>Current MidiStreamWriter instance</returns>
         public MidiStreamWriter WriteNotes(byte channel, IEnumerable<MidiNote> midiNotes)
         {
             if (_currentTrack == -1)
@@ -421,9 +501,9 @@ namespace Hearn.Midi
                 throw new ArgumentException("midiNotes not supplied");
             }
 
-            UpdateCurrentTime();
+            StopPlayedNotes();
 
-            var deltaTime = UpdateDelta();
+            var deltaTime = CalculateDelta();
 
             var eventCode = (byte)(NOTE_ON_EVENT | channel);
 
@@ -463,31 +543,51 @@ namespace Hearn.Midi
 
         }
 
-        public MidiStreamWriter Wait(NoteDurations duration)
+        /// <summary>
+        /// Updates the current time of the track by a NoteDuration, stopping any playing notes due to end
+        /// </summary>
+        /// <param name="duration">length of time to tick over</param>
+        /// <returns>Current MidiStreamWriter instance</returns>
+        public MidiStreamWriter Tick(NoteDurations duration)
         {
-            return Wait((long)duration);
+            return Tick((long)duration);
         }
 
-        public MidiStreamWriter Wait(long duration)
+        /// <summary>
+        /// Updates the current time of the track by a NoteDuration, stopping any playing notes due to end
+        /// </summary>
+        /// <param name="duration">length of time to tick over (See NoteDurations enum values)</param>
+        /// <returns>Current MidiStreamWriter instance</returns>
+        public MidiStreamWriter Tick(long duration)
         {
             _awaitedTick = _currentTick + duration;
-            UpdateCurrentTime();
+            StopPlayedNotes();
 
             return this;
         }
 
+        /// <summary>
+        /// Writes the buffer to the underlying stream
+        /// </summary>
         public void Flush()
-        {
+        {            
             _stream.Flush();
         }
 
+        /// <summary>
+        /// Close the stream
+        /// </summary>
         public void Close()
         {
-            _streamIsOpen = false;
-            _stream.Close();
+            if (_streamIsOpen)
+            {
+                _stream.Flush();
+                _streamIsOpen = false;
+                _stream.Close();
+            }            
         }
 
-        private void UpdateCurrentTime()
+        private void StopPlayedNotes()
         {
 
             var notesToStop = _playingNotes.Where(x => x.EndTick <= _awaitedTick);
@@ -524,7 +624,7 @@ namespace Hearn.Midi
             }
         }
 
-        private long UpdateDelta()
+        private long CalculateDelta()
         {
             var deltaTime = _awaitedTick - _currentTick;
             if (deltaTime < 0)

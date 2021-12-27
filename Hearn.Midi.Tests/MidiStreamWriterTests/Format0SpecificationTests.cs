@@ -49,9 +49,9 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
                     new MidiNote() { Note = MidiNoteNumbers.C3, Velocity = 96, Duration =  NoteDurations.WholeNote },
                     new MidiNote() { Note = MidiNoteNumbers.C4, Velocity = 96, Duration =  NoteDurations.WholeNote }
                 })
-                .Wait(NoteDurations.QuarterNote)
+                .Tick(NoteDurations.QuarterNote)
                 .WriteNote(1, new MidiNote() { Note = MidiNoteNumbers.G4, Velocity = 64, Duration = NoteDurations.HalfNoteDotted })
-                .Wait(NoteDurations.QuarterNote)
+                .Tick(NoteDurations.QuarterNote)
                 .WriteNote(0, new MidiNote() { Note = MidiNoteNumbers.E5, Velocity = 32, Duration = NoteDurations.HalfNote })
                 //Leave EndTrack to end playing notes in this test
                 .WriteEndTrack();
