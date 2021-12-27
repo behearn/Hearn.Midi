@@ -64,6 +64,8 @@ namespace Hearn.Midi
             SemiQuaver = 24,
             SixteenthNote = 24,
 
+            Triplet = 32,
+
             SemiQuaverDotted = 36,
             SixteenthNoteDotted = 36,
 
@@ -346,7 +348,7 @@ namespace Hearn.Midi
         /// <summary>
         /// Changes the instrument for the supplied channel
         /// </summary>
-        /// <param name="channel">channel number [0..15] (Note: channel 10 (value 9 as zero based) is reserved for percussion)</param>
+        /// <param name="channel">channel number [0..15] (Note: channel 10 ([9]) is reserved for percussion)</param>
         /// <param name="instrument">instrument</param>
         /// <returns>Current MidiStreamWriter instance</returns>
         public MidiStreamWriter WriteChangeInstrument(byte channel, Instruments instrument)
@@ -377,7 +379,7 @@ namespace Hearn.Midi
         /// <summary>
         /// Writes a note to a channel but does not tick over the current time.  Use Tick(length) to control the start time of further notes
         /// </summary>
-        /// <param name="channel">channel number [0..15] (Note: channel 10 (value 9 as zero based) is reserved for percussion)</param>
+        /// <param name="channel">channel number [0..15] (Note: channel 10 ([9]) is reserved for percussion)</param>
         /// <param name="midiNote">An instance of the MidiNote class</param>
         /// <returns>Current MidiStreamWriter instance</returns>
         public MidiStreamWriter WriteNote(byte channel, MidiNote midiNote)
@@ -388,7 +390,7 @@ namespace Hearn.Midi
         /// <summary>
         /// Writes a note to a channel and ticks over the current time, stopping any playing notes due to end
         /// </summary>
-        /// <param name="channel">channel number [0..15] (Note: channel 10 (value 9 as zero based) is reserved for percussion)</param>
+        /// <param name="channel">channel number [0..15] (Note: channel 10 ([9]) is reserved for percussion)</param>
         /// <param name="note">note to play</param>
         /// <param name="velocity">soft to loud [0..127]</param>
         /// <param name="length">duration of the note</param>
@@ -403,7 +405,7 @@ namespace Hearn.Midi
         /// <summary>
         /// Writes a note to a channel and ticks over the current time, stopping any playing notes due to end
         /// </summary>
-        /// <param name="channel">channel number [0..15] (Note: channel 10 (value 9 as zero based) is reserved for percussion)</param>
+        /// <param name="channel">channel number [0..15] (Note: channel 10 ([9]) is reserved for percussion)</param>
         /// <param name="note">note to play</param>
         /// <param name="velocity">soft to loud [0..127]</param>
         /// <param name="length">duration of the note (see NoteDuration enum values)</param>
@@ -418,7 +420,7 @@ namespace Hearn.Midi
         /// <summary>
         /// Writes a note to a channel but does not tick over the current time.  Use Tick(length) to control the start time of further notes
         /// </summary>
-        /// <param name="channel">channel number [0..15] (Note: channel 10 (value 9 as zero based) is reserved for percussion)</param>
+        /// <param name="channel">channel number [0..15] (Note: channel 10 ([9]) is reserved for percussion)</param>
         /// <param name="note">note to play</param>
         /// <param name="velocity">soft to loud [0..127]</param>
         /// <param name="length">duration of the note</param>
@@ -431,7 +433,7 @@ namespace Hearn.Midi
         /// <summary>
         /// Writes a note to a channel but does not tick over the current time.  Use Tick(length) to control the start time of further notes
         /// </summary>
-        /// <param name="channel">channel number [0..15] (Note: channel 10 (value 9 as zero based) is reserved for percussion)</param>
+        /// <param name="channel">channel number [0..15] (Note: channel 10 ([9]) is reserved for percussion)</param>
         /// <param name="note"></param>
         /// <param name="velocity">soft to loud [0..127]</param>
         /// <param name="length">duration of the note (see NoteDuration enum values)</param>
@@ -481,7 +483,7 @@ namespace Hearn.Midi
         /// <summary>
         /// Writes a group of notes to a channel but does not tick over the current time.  Use Tick(length) to control the start time of further notes
         /// </summary>
-        /// <param name="channel">channel number [0..15] (Note: channel 10 (value 9 as zero based) is reserved for percussion)</param>
+        /// <param name="channel">channel number [0..15] (Note: channel 10 ([9]) is reserved for percussion)</param>
         /// <param name="midiNotes">List of MidiNote instances to play</param>
         /// <returns>Current MidiStreamWriter instance</returns>
         public MidiStreamWriter WriteNotes(byte channel, IEnumerable<MidiNote> midiNotes)
@@ -541,6 +543,19 @@ namespace Hearn.Midi
 
             return this;
 
+        }
+
+        /// <summary>
+        /// Writes percussion beat to channel 10 ([9]) 
+        /// </summary>
+        /// <param name="percussion"></param>
+        /// <param name="velocity"></param>
+        /// <returns></returns>
+        public MidiStreamWriter WritePercussion(Percussion percussion, byte velocity)
+        {
+            const byte PERCUSSION_CHANNEL = 9;
+            WriteNote(PERCUSSION_CHANNEL, (MidiNoteNumbers)percussion, velocity, NoteDurations.QuarterNote);
+            return this;
         }
 
         /// <summary>

@@ -25,7 +25,7 @@ namespace Hearn.Midi.Example
             {
 
                 midiStreamWriter
-                    .WriteHeader(Formats.MultiSimultaneousTracks, 3);
+                    .WriteHeader(Formats.MultiSimultaneousTracks, 4);
 
                 midiStreamWriter
                     .WriteStartTrack()
@@ -36,7 +36,21 @@ namespace Hearn.Midi.Example
                         .WriteString(StringTypes.ArbitraryText, "From Johann Sebastian Bach's Notebook for Anna Magdalena Bach")
                     .WriteEndTrack();
 
-                midiStreamWriter
+                WriteTrack1(midiStreamWriter);
+
+                WriteTrack2(midiStreamWriter);
+
+                WritePercussionTrack(midiStreamWriter);
+
+                //using will call Dispose which automatically flushes and closes the stream
+            }
+
+        }
+
+        static void WriteTrack1(MidiStreamWriter midiStreamWriter)
+        {
+
+            midiStreamWriter
                     .WriteStartTrack()
                         //Measure 1
                         .WriteNoteAndTick(0, MidiNoteNumbers.D5, VELOCITY_MEZZO_PIANO, NoteDurations.QuarterNote)
@@ -221,7 +235,11 @@ namespace Hearn.Midi.Example
                         .Tick(NoteDurations.HalfNoteDotted)
                     .WriteEndTrack();
 
-                midiStreamWriter
+        }
+
+        static void WriteTrack2(MidiStreamWriter midiStreamWriter)
+        {
+            midiStreamWriter
                     .WriteStartTrack()
                         //Measure 1
                         .WriteNotes(1, new List<MidiNote>()
@@ -353,10 +371,62 @@ namespace Hearn.Midi.Example
                         .WriteNote(1, MidiNoteNumbers.G2, VELOCITY_MEZZO_PIANO, NoteDurations.EighthNote)
                         .Tick(NoteDurations.QuarterNote)
                     .WriteEndTrack();
-
-
-            }
-
         }
+
+        static void WritePercussionTrack(MidiStreamWriter midiStreamWriter)
+        {
+
+            midiStreamWriter.WriteStartTrack();
+            for (var i = 0; i < 32; i++)
+            {
+                if (i == 15)
+                {
+                    //Fill half waythrough
+                    midiStreamWriter
+                        .WritePercussion(Percussion.HighTom, 80)
+                        .Tick(NoteDurations.Triplet)
+                        .WritePercussion(Percussion.HighTom, 80)
+                        .Tick(NoteDurations.Triplet)
+                        .WritePercussion(Percussion.HighTom, 80)
+                        .Tick(NoteDurations.Triplet)
+                        .WritePercussion(Percussion.HiMidTom, 80)
+                        .Tick(NoteDurations.Triplet)
+                        .WritePercussion(Percussion.HiMidTom, 80)
+                        .Tick(NoteDurations.Triplet)
+                        .WritePercussion(Percussion.HiMidTom, 80)
+                        .Tick(NoteDurations.Triplet)
+                        .WritePercussion(Percussion.LowTom, 80)
+                        .Tick(NoteDurations.Triplet)
+                        .WritePercussion(Percussion.LowTom, 80)
+                        .Tick(NoteDurations.Triplet)
+                        .WritePercussion(Percussion.LowTom, 80)
+                        .Tick(NoteDurations.Triplet);
+                }
+                else
+                {
+                    if (i % 4 == 0)
+                    {
+                        //Crash every 4th bar
+                        midiStreamWriter.WritePercussion(Percussion.CrashCymbal1, 64);
+                    }
+                    for (var j = 0; j < 9; j++)
+                    {
+                        //Hihat + bass + snare pattern
+                        midiStreamWriter.WritePercussion(Percussion.ClosedHihat, 64);
+                        if (j == 0)
+                        {
+                            midiStreamWriter.WritePercussion(Percussion.AcousticBassDrum, 64);
+                        }
+                        else if (j == 3 || j == 6)
+                        {
+                            midiStreamWriter.WritePercussion(Percussion.AcousticSnare, 64);
+                        }
+                        midiStreamWriter.Tick(NoteDurations.Triplet);
+                    }
+                }
+            }
+            midiStreamWriter.WriteEndTrack();
+        }
+
     }
 }
