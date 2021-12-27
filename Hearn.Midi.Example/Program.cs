@@ -10,10 +10,11 @@ namespace Hearn.Midi.Example
     {
         const string FILENAME = "MinuetInG.mid";
         const byte VELOCITY_MEZZO_PIANO = 64;
+        const byte VELOCITY_SOFT = 32;
 
         static void Main(string[] args)
         {
-             
+
             if (File.Exists(FILENAME))
             {
                 File.Delete(FILENAME);
@@ -25,7 +26,7 @@ namespace Hearn.Midi.Example
             {
 
                 midiStreamWriter
-                    .WriteHeader(Formats.MultiSimultaneousTracks, 4);
+                    .WriteHeader(Formats.MultiSimultaneousTracks, 5);
 
                 midiStreamWriter
                     .WriteStartTrack()
@@ -41,6 +42,8 @@ namespace Hearn.Midi.Example
                 WriteTrack2(midiStreamWriter);
 
                 WritePercussionTrack(midiStreamWriter);
+
+                WriteChords(midiStreamWriter);
 
                 //using will call Dispose which automatically flushes and closes the stream
             }
@@ -428,5 +431,180 @@ namespace Hearn.Midi.Example
             midiStreamWriter.WriteEndTrack();
         }
 
+        static void WriteChords(MidiStreamWriter midiStreamWriter)
+        {
+
+            midiStreamWriter
+                 .WriteStartTrack()
+                 .WriteChangeInstrument(3, Instruments.StringEnsemble1)
+                     //Measures 1 & 2
+                     .WriteNotes(3, GetChordGMajor(NoteDurations.WholeNoteDotted))
+                     .Tick(NoteDurations.WholeNoteDotted)
+                     //Measures 3
+                     .WriteNotes(3, GetChordCMajor(NoteDurations.HalfNoteDotted))
+                     .Tick(NoteDurations.HalfNoteDotted)
+                     //Measures 4
+                     .WriteNotes(3, GetChordGMajor(NoteDurations.HalfNoteDotted))
+                     .Tick(NoteDurations.HalfNoteDotted)
+                     //Measures 5
+                     .WriteNotes(3, GetChordAMinor(NoteDurations.HalfNoteDotted))
+                     .Tick(NoteDurations.HalfNoteDotted)
+                     //Measures 6
+                     .WriteNotes(3, GetChordGMajor(NoteDurations.HalfNoteDotted))
+                     .Tick(NoteDurations.HalfNoteDotted)
+                     //Measures 7
+                     .WriteNotes(3, GetChordDMajor(NoteDurations.QuarterNote))
+                     .Tick(NoteDurations.QuarterNote)
+                     .WriteNotes(3, GetChordGMajor(NoteDurations.HalfNote))
+                     .Tick(NoteDurations.HalfNote)
+                     //Measures 8
+                     .WriteNotes(3, GetChordDMajor7(NoteDurations.HalfNoteDotted))
+                     .Tick(NoteDurations.HalfNoteDotted)
+                     //Measures 9 & 10
+                     .WriteNotes(3, GetChordGMajor(NoteDurations.WholeNoteDotted))
+                     .Tick(NoteDurations.WholeNoteDotted)
+                     //Measures 11
+                     .WriteNotes(3, GetChordCMajor(NoteDurations.HalfNoteDotted))
+                     .Tick(NoteDurations.HalfNoteDotted)
+                     //Measures 12
+                     .WriteNotes(3, GetChordGMajor(NoteDurations.HalfNoteDotted))
+                     .Tick(NoteDurations.HalfNoteDotted)
+                     //Measures 13
+                     .WriteNotes(3, GetChordAMinor(NoteDurations.HalfNote))
+                     .Tick(NoteDurations.HalfNote)
+                     .WriteNotes(3, GetChordDMajor7(NoteDurations.QuarterNote))
+                     .Tick(NoteDurations.QuarterNote)
+                     //Measures 14
+                     .WriteNotes(3, GetChordGMajor(NoteDurations.HalfNoteDotted))
+                     .Tick(NoteDurations.HalfNoteDotted)
+                     //Measures 15
+                     .WriteNotes(3, GetChordAMinor(NoteDurations.QuarterNote))
+                     .Tick(NoteDurations.QuarterNote)
+                     .WriteNotes(3, GetChordDMajor7(NoteDurations.HalfNote))
+                     .Tick(NoteDurations.HalfNote)
+                     //Measures 16 & 17
+                     .WriteNotes(3, GetChordGMajor(NoteDurations.WholeNoteDotted))
+                     .Tick(NoteDurations.WholeNoteDotted)
+                     //Measures 18
+                     .WriteNotes(3, GetChordDMajor7(NoteDurations.HalfNoteDotted))
+                     .Tick(NoteDurations.HalfNoteDotted)
+                     //Measures 19
+                     .WriteNotes(3, GetChordCMajor(NoteDurations.HalfNoteDotted))
+                     .Tick(NoteDurations.HalfNoteDotted)
+                     //Measures 20 & 21
+                     .WriteNotes(3, GetChordAMajor(NoteDurations.WholeNoteDotted))
+                     .Tick(NoteDurations.WholeNoteDotted)
+                     //Measures 22
+                     .WriteNotes(3, GetChordGMajor(NoteDurations.QuarterNote))
+                     .Tick(NoteDurations.QuarterNote)
+                     .WriteNotes(3, GetChordDMajor(NoteDurations.QuarterNote))
+                     .Tick(NoteDurations.QuarterNote)
+                     .WriteNotes(3, GetChordAMajor(NoteDurations.QuarterNote))
+                     .Tick(NoteDurations.QuarterNote)
+                     //Measures 23
+                     .WriteNotes(3, GetChordDMajor(NoteDurations.HalfNote))
+                     .Tick(NoteDurations.HalfNote)
+                     .WriteNotes(3, GetChordAMajor(NoteDurations.QuarterNote))
+                     .Tick(NoteDurations.QuarterNote)
+                     //Measures 24
+                     .WriteNotes(3, GetChordDMajor(NoteDurations.HalfNote))
+                     .Tick(NoteDurations.HalfNote)
+                     .WriteNotes(3, GetChordDMajor7(NoteDurations.QuarterNote))
+                     .Tick(NoteDurations.QuarterNote)
+                     //Measures 25
+                     .WriteNotes(3, GetChordGMajor(NoteDurations.HalfNoteDotted))
+                     .Tick(NoteDurations.HalfNoteDotted)
+                     //Measures 26
+                     .WriteNotes(3, GetChordCMajor(NoteDurations.HalfNoteDotted))
+                     .Tick(NoteDurations.HalfNoteDotted)
+                     //Measures 27
+                     .WriteNotes(3, GetChordGMajor(NoteDurations.QuarterNote))
+                     .Tick(NoteDurations.QuarterNote)
+                     .WriteNotes(3, GetChordAMinor(NoteDurations.QuarterNote))
+                     .Tick(NoteDurations.QuarterNote)
+                     .WriteNotes(3, GetChordGMajor(NoteDurations.QuarterNote))
+                     .Tick(NoteDurations.QuarterNote)
+                     //Measures 28 & 29
+                     .WriteNotes(3, GetChordDMajor(NoteDurations.WholeNoteDotted))
+                     .Tick(NoteDurations.WholeNoteDotted)
+                     //Measures 30
+                     .WriteNotes(3, GetChordCMajor(NoteDurations.QuarterNote))
+                     .Tick(NoteDurations.QuarterNote)
+                     .WriteNotes(3, GetChordGMajor(NoteDurations.QuarterNote))
+                     .Tick(NoteDurations.QuarterNote)
+                     .WriteNotes(3, GetChordDMajor(NoteDurations.QuarterNote))
+                     .Tick(NoteDurations.QuarterNote)
+                     //Measures 31
+                     .WriteNotes(3, GetChordGMajor(NoteDurations.HalfNote))
+                     .Tick(NoteDurations.HalfNote)
+                     .WriteNotes(3, GetChordDMajor7(NoteDurations.QuarterNote))
+                     .Tick(NoteDurations.QuarterNote)
+                     //Measures 32
+                     .WriteNotes(3, GetChordGMajor(NoteDurations.HalfNoteDotted))
+                     .Tick(NoteDurations.HalfNoteDotted)
+                .WriteEndTrack();
+
+        }
+
+        static List<MidiNote>GetChordGMajor(NoteDurations duration)
+        {
+            return new List<MidiNote>()
+            {
+                new MidiNote() { Note = MidiNoteNumbers.G3, Velocity = VELOCITY_SOFT, Duration = duration },
+                new MidiNote() { Note = MidiNoteNumbers.B3, Velocity = VELOCITY_SOFT, Duration = duration },
+                new MidiNote() { Note = MidiNoteNumbers.D4, Velocity = VELOCITY_SOFT, Duration = duration }
+            };
+        }
+
+        static List<MidiNote> GetChordCMajor(NoteDurations duration)
+        {
+            return new List<MidiNote>()
+            {
+                new MidiNote() { Note = MidiNoteNumbers.C4, Velocity = VELOCITY_SOFT, Duration = duration },
+                new MidiNote() { Note = MidiNoteNumbers.E4, Velocity = VELOCITY_SOFT, Duration = duration },
+                new MidiNote() { Note = MidiNoteNumbers.G3, Velocity = VELOCITY_SOFT, Duration = duration }
+            };
+        }
+
+        static List<MidiNote> GetChordAMinor(NoteDurations duration)
+        {
+            return new List<MidiNote>()
+            {
+                new MidiNote() { Note = MidiNoteNumbers.A3, Velocity = VELOCITY_SOFT, Duration = duration },
+                new MidiNote() { Note = MidiNoteNumbers.C4, Velocity = VELOCITY_SOFT, Duration = duration },
+                new MidiNote() { Note = MidiNoteNumbers.E4, Velocity = VELOCITY_SOFT, Duration = duration }
+            };
+        }
+
+        static List<MidiNote> GetChordDMajor(NoteDurations duration)
+        {
+            return new List<MidiNote>()
+            {
+                new MidiNote() { Note = MidiNoteNumbers.D4, Velocity = VELOCITY_SOFT, Duration = duration },
+                new MidiNote() { Note = MidiNoteNumbers.FSGF3, Velocity = VELOCITY_SOFT, Duration = duration },
+                new MidiNote() { Note = MidiNoteNumbers.A3, Velocity = VELOCITY_SOFT, Duration = duration }
+            };
+        }
+
+        static List<MidiNote> GetChordDMajor7(NoteDurations duration)
+        {
+            return new List<MidiNote>()
+            {
+                new MidiNote() { Note = MidiNoteNumbers.D4, Velocity = VELOCITY_SOFT, Duration = duration },
+                new MidiNote() { Note = MidiNoteNumbers.FSGF3, Velocity = VELOCITY_SOFT, Duration = duration },
+                new MidiNote() { Note = MidiNoteNumbers.A3, Velocity = VELOCITY_SOFT, Duration = duration },
+                new MidiNote() { Note = MidiNoteNumbers.C4, Velocity = VELOCITY_SOFT, Duration = duration }
+            };
+        }
+
+        static List<MidiNote> GetChordAMajor(NoteDurations duration)
+        {
+            return new List<MidiNote>()
+            {
+                new MidiNote() { Note = MidiNoteNumbers.A3, Velocity = VELOCITY_SOFT, Duration = duration },
+                new MidiNote() { Note = MidiNoteNumbers.CSDF4, Velocity = VELOCITY_SOFT, Duration = duration },
+                new MidiNote() { Note = MidiNoteNumbers.E3, Velocity = VELOCITY_SOFT, Duration = duration }
+            };
+        }
     }
 }
