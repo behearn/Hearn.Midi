@@ -100,6 +100,8 @@ namespace Hearn.Midi
             DoubleWholeNoteDotted = 1152
         }
 
+        public int Tracks { get => _tracks; }
+
         /// <summary>
         /// Creates a new MidiStreamWriter instance
         /// </summary>
@@ -133,9 +135,9 @@ namespace Hearn.Midi
 
             const long HEADER_LENGTH = 6;
 
-            if (tracks < 0)
+            if (tracks == 0)
             {
-                throw new ArgumentException("tracks cannot be less than zero");
+                throw new ArgumentException("tracks cannot be zero");
             }
 
             if (format == Formats.SingleTrack && tracks != 1)
