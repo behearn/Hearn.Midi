@@ -135,6 +135,11 @@ namespace Hearn.Midi
 
             const long HEADER_LENGTH = 6;
 
+            if (_tracks > 0)
+            {
+                throw new InvalidOperationException("WriteHeader has already been called");
+            }
+
             if (tracks == 0)
             {
                 throw new ArgumentException("tracks cannot be zero");
@@ -166,19 +171,19 @@ namespace Hearn.Midi
         {
             if (_tracks == -1)
             {
-                throw new ArgumentException($"Create header before starting a new track");
+                throw new InvalidOperationException($"Create header before starting a new track");
             }
 
             if (_currentTrack != -1)
             {
-                throw new ArgumentException($"End track {_currentTrack} before starting a new track");
+                throw new InvalidOperationException($"End track {_currentTrack} before starting a new track");
             }
 
             _currentTrack = _lastTrack + 1;
 
             if (_currentTrack > _tracks)
             {
-                throw new ArgumentException("Max number of tracks reached");
+                throw new InvalidOperationException("Max number of tracks reached");
             }
 
             var header = Encoding.ASCII.GetBytes("MTrk");

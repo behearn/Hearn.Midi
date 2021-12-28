@@ -254,5 +254,43 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
             Assert.AreEqual(2, _midiStreamWriter.Tracks);
 
         }
+
+        [TestMethod]
+        public void MidiStreamWriter_WriteHeader_ThrowsExceptionIfCalledAgain()
+        {
+
+            //Arrange
+            
+            _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.SingleTrack, 1);
+
+            //Act
+
+            var ex = Assert.ThrowsException<InvalidOperationException>(() =>
+                _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.SingleTrack, 1)
+            );
+
+            //Assert
+
+            Assert.AreEqual("WriteHeader has already been called", ex.Message);
+
+        }
+
+
+        [TestMethod]
+        public void MidiStreamWriter_WriteStartHeader_ReturnsMidiStreamWriter()
+        {
+
+            //Arrange
+            
+            //Act
+
+            var msw = _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.MultiSimultaneousTracks, 2);
+
+            //Assert           
+
+            Assert.IsInstanceOfType(msw, typeof(MidiStreamWriter));
+
+        }
+
     }
 }
