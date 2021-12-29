@@ -253,7 +253,7 @@ namespace Hearn.Midi
         {
             if (_currentTrack == -1)
             {
-                throw new ArgumentException("WriteString must be called after WriteStartTrack");
+                throw new InvalidOperationException("WriteString must be called after WriteStartTrack");
             }
 
             if (text.Length > 127)
@@ -261,7 +261,7 @@ namespace Hearn.Midi
                 throw new ArgumentException("text exceeds 127 characters");
             }
 
-            //Text Event = 00 FF 01 
+            //Text Event = 00 FF 0x<stringType> 
             _stream.WriteByte(0x00);
             _stream.WriteByte(META_EVENT);
             _stream.WriteByte((byte)stringType);
