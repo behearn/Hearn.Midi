@@ -323,7 +323,12 @@ namespace Hearn.Midi
 
             if (_currentTrack == -1)
             {
-                throw new ArgumentException("WriteTimeSignature must be called after WriteStartTrack");
+                throw new InvalidOperationException("WriteTimeSignature must be called after WriteStartTrack");
+            }
+
+            if (topNumber == 0)
+            {
+                throw new ArgumentException("topNumber cannot be zero");
             }
 
             _stream.WriteByte(0x00); //Delta time
