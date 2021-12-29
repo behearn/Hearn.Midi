@@ -462,7 +462,7 @@ namespace Hearn.Midi
 
             if (_currentTrack == -1)
             {
-                throw new ArgumentException("WriteNote must be called after WriteStartTrack");
+                throw new InvalidOperationException("WriteNote must be called after WriteStartTrack");
             }
 
             if (channel < 0 || channel > 15)
@@ -474,8 +474,6 @@ namespace Hearn.Midi
             {
                 throw new ArgumentException("velocity must be in the range 0..127");
             }
-
-            StopPlayedNotes();
 
             var deltaTime = CalculateDelta();
 
@@ -509,7 +507,7 @@ namespace Hearn.Midi
         {
             if (_currentTrack == -1)
             {
-                throw new ArgumentException("WriteNotes must be called after WriteStartTrack");
+                throw new InvalidOperationException("WriteNotes must be called after WriteStartTrack");
             }
 
             if (channel < 0 || channel > 15)
@@ -632,20 +630,16 @@ namespace Hearn.Midi
                 var i = 0;
                 foreach (var note in notesToStop.OrderBy(x => x.EndTick).ThenBy(x => x.Id))
                 {
+                    var deltaTime = note.EndTick - _currentTick;
+                    _currentTick = note.EndTick;
+                    
+                    _stream.WriteVariableLengthQuantity(deltaTime);
+
                     if (i == 0 || lastChannel != note.Channel)
-                    {
-                        var deltaTime = note.EndTick - _currentTick;
-
-                        var eventCode = (byte)(NOTE_OFF_EVENT | note.Channel);
-                        _stream.WriteVariableLengthQuantity(deltaTime);
+                    {                        
+                        var eventCode = (byte)(NOTE_OFF_EVENT | note.Channel);                        
                         _stream.WriteByte(eventCode);
-                        lastChannel = note.Channel;
-
-                        _currentTick = note.EndTick;
-                    }
-                    else if (i > 0)
-                    {
-                        _stream.WriteVariableLengthQuantity(0x00); //Delta time
+                        lastChannel = note.Channel;                        
                     }
 
                     _stream.WriteByte((byte)note.Note);
