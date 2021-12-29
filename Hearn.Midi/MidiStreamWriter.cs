@@ -280,8 +280,12 @@ namespace Hearn.Midi
         /// <returns>Current MidiStreamWriter instance</returns>
         public MidiStreamWriter WriteTempo(int bpm)
         {
+            if (_currentTrack == -1)
+            {
+                throw new InvalidOperationException("WriteTempo must be called after WriteStartTrack");
+            }
 
-            if (bpm <= 0)
+            if (bpm < 0)
             {
                 throw new ArgumentException("Tempo cannot be negative");
             }
@@ -289,12 +293,7 @@ namespace Hearn.Midi
             {
                 throw new ArgumentException("Tempo cannot be zero");
             }
-
-            if (_currentTrack == -1)
-            {
-                throw new ArgumentException("WriteTempo must be called after WriteStartTrack");
-            }
-
+           
             const long MICROSECONDS_PER_MINUTE = 60000000;
 
             var tempo = MICROSECONDS_PER_MINUTE / bpm;
