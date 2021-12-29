@@ -377,7 +377,7 @@ namespace Hearn.Midi
 
             if (_currentTrack == -1)
             {
-                throw new ArgumentException("WriteChangeInstrument must be called after WriteStartTrack");
+                throw new InvalidOperationException("WriteChangeInstrument must be called after WriteStartTrack");
             }
 
             if (channel < 0 || channel > 15)
