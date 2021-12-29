@@ -100,7 +100,15 @@ namespace Hearn.Midi
             DoubleWholeNoteDotted = 1152
         }
 
+        /// <summary>
+        /// Returns the number of tracks specified in WriteHeader. Returns -1 if no header written
+        /// </summary>
         public int Tracks { get => _tracks; }
+
+        /// <summary>
+        /// Returns the current track set by WriteStartTrack. Returns -1 if not currently writing a track
+        /// </summary>
+        public int CurrentTrack { get => _currentTrack; }
 
         /// <summary>
         /// Creates a new MidiStreamWriter instance

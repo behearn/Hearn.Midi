@@ -155,7 +155,29 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
 
             //Assert           
 
-            Assert.IsInstanceOfType(msw, typeof(MidiStreamWriter));
+            Assert.AreEqual(msw, _midiStreamWriter);
+
+        }
+        
+        [TestMethod]
+        public void MidiStreamWriter_WriteStartTrack_CurrentTrackSet()
+        {
+
+            //Arrange
+
+            _midiStreamWriter
+                .WriteHeader(MidiStreamWriter.Formats.MultiSimultaneousTracks, 2)
+                .WriteStartTrack()
+                .WriteEndTrack();
+
+
+            //Act
+
+            _midiStreamWriter.WriteStartTrack();
+
+            //Assert           
+
+            Assert.AreEqual(2, _midiStreamWriter.CurrentTrack);
 
         }
     }

@@ -288,7 +288,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
 
             //Assert           
 
-            Assert.IsInstanceOfType(msw, typeof(MidiStreamWriter));
+            Assert.AreEqual(msw, _midiStreamWriter);
 
         }
 
