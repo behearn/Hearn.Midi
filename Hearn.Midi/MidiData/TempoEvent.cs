@@ -10,7 +10,7 @@ namespace Hearn.Midi.MidiData
     {
 
         public TempoEvent(long delta)
-            : base(delta)
+            : base(delta, MetaEventTypes.TempoEvent)
         {
         }
         

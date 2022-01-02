@@ -10,7 +10,7 @@ namespace Hearn.Midi.MidiData
     {
 
         public NoteOffEvent(long delta)
-           : base(delta)
+           : base(delta, MidiEventTypes.NoteOff)
         {
         }
 

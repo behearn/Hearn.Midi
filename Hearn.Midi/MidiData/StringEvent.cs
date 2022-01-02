@@ -9,7 +9,7 @@ namespace Hearn.Midi.MidiData
     public class StringEvent : MetaEvent
     {
         public StringEvent(long delta)
-           : base(delta)
+           : base(delta, MetaEventTypes.StringEvent)
         {
         }        
 

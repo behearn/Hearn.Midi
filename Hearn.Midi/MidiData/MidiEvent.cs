@@ -9,10 +9,22 @@ namespace Hearn.Midi.MidiData
     public class MidiEvent : BaseMidiEvent
     {
 
-        public MidiEvent(long delta)
+        public enum MidiEventTypes
+        {
+            ProgramChange,
+            NoteOn,
+            NoteOff
+        }
+
+        private MidiEventTypes _midiEventType;
+
+        public MidiEvent(long delta, MidiEventTypes midiEventType)
             : base(MidiDataTypes.MidiEvent, delta)
         {
+            _midiEventType = midiEventType;
         }
+
+        public MidiEventTypes MidiEventType { get => _midiEventType; }
 
     }
 }

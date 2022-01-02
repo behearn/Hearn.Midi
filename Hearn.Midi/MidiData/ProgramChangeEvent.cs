@@ -9,7 +9,7 @@ namespace Hearn.Midi.MidiData
     public class ProgramChangeEvent : MidiEvent
     {
         public ProgramChangeEvent(long delta)
-           : base(delta)
+           : base(delta, MidiEventTypes.ProgramChange)
         {
         }
 

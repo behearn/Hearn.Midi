@@ -10,7 +10,7 @@ namespace Hearn.Midi.MidiData
     {
 
         public EndTrackEvent(long delta)
-            : base(delta)
+            : base(delta, MetaEventTypes.EndTrackEvent)
         {
         }
 

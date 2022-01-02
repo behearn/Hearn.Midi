@@ -9,9 +9,23 @@ namespace Hearn.Midi.MidiData
     public abstract class MetaEvent : BaseMidiEvent
     {
 
-        public MetaEvent(long delta)
+        public enum MetaEventTypes
+        {
+            StringEvent,
+            TempoEvent,
+            TimeSignatureEvent,
+            EndTrackEvent
+        }
+
+        MetaEventTypes _metaEventType;
+
+        public MetaEvent(long delta, MetaEventTypes metaEventType)
             : base(MidiDataTypes.MetaEvent, delta)
         {
+            _metaEventType = metaEventType;
         }
+
+        public MetaEventTypes MetaEventType { get => _metaEventType; }
+
     }
 }
