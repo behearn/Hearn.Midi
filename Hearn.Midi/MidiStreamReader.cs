@@ -17,6 +17,7 @@ namespace Hearn.Midi
         bool _headerRead;
         bool _inTrack;
         int _trackNo;
+        byte _runningStatus;
 
         public MidiStreamReader(Stream stream)
         {
@@ -35,7 +36,7 @@ namespace Hearn.Midi
             }
             else
             {
-                return ReadChunk();
+                return ReadEvent();
             }
         }
 
@@ -124,26 +125,26 @@ namespace Hearn.Midi
 
         }
 
-        private BaseMidiData ReadChunk()
+        private BaseMidiData ReadEvent()
         {
 
             var deltaTime = _stream.ReadVariableLengthQuantity();
 
             //Cast straight to byte as we've validated the stream length already
-            var eventType = (byte)_stream.ReadByte(); 
+            var eventCode = (byte)_stream.ReadByte(); 
             
-            switch (eventType)
+            switch (eventCode)
             {
                 case MidiEventConstants.META_EVENT:
-                    return ReadMetaEventChunk();
+                    return ReadMetaEvent(deltaTime);
 
                 default:
-                    return ReadMidiEvent(eventType);
+                    return ReadMidiEvent(deltaTime, eventCode);
             }
 
         }
 
-        private MetaEvent ReadMetaEventChunk()
+        private MetaEvent ReadMetaEvent(long deltaTime)
         {
 
             var metaEventType = _stream.ReadInt();
@@ -151,10 +152,13 @@ namespace Hearn.Midi
             switch(metaEventType)
             {
                 case MidiEventConstants.META_EVENT_TIME_SIGNATURE:
-                    return ReadTimeSignatureEvent();
+                    return ReadTimeSignatureEvent(deltaTime);
 
                 case MidiEventConstants.META_EVENT_SET_TEMPO:
-                    return ReadTempoEvent();
+                    return ReadTempoEvent(deltaTime);
+
+                case MidiEventConstants.META_EVENT_END_OF_TRACK:
+                    return ReadEndTrack(deltaTime);
 
                 default:
                     throw new NotImplementedException($"Meta Event {metaEventType} not implemented");
@@ -162,13 +166,13 @@ namespace Hearn.Midi
 
         }
 
-        private TimeSignatureEvent ReadTimeSignatureEvent()
+        private TimeSignatureEvent ReadTimeSignatureEvent(long deltaTime)
         {
 
             var bytes = new byte[4];
             _stream.Read(bytes, 0, bytes.Length);
 
-            var timeSignatureEvent = new TimeSignatureEvent();
+            var timeSignatureEvent = new TimeSignatureEvent(deltaTime);
 
             timeSignatureEvent.TopNumber = bytes[0];
             timeSignatureEvent.BottomNumber = (byte)Math.Pow(bytes[1], 2);
@@ -179,12 +183,12 @@ namespace Hearn.Midi
 
         }
 
-        private TempoEvent ReadTempoEvent()
+        private TempoEvent ReadTempoEvent(long deltaTime)
         {
 
             var microSecondsPerQuarterNote = _stream.Read24bitInt();
 
-            var tempoEvent = new TempoEvent();
+            var tempoEvent = new TempoEvent(deltaTime);
 
             tempoEvent.MicroSecondsPerQuarterNote = microSecondsPerQuarterNote;
 
@@ -192,32 +196,93 @@ namespace Hearn.Midi
 
         }
 
-        private MidiEvent ReadMidiEvent(byte midiEvent)
+        private EndTrackEvent ReadEndTrack(long deltaTime)
         {
-            var midiEventType = (byte)(midiEvent & MidiEventConstants.MASK_MIDI_EVENT_TYPE);
-            var channel = (byte)(midiEvent & MidiEventConstants.MASK_MIDI_EVENT_CHANNEL);
+
+            _inTrack = false;
+            _runningStatus = 0x00;
+
+            var endTrackEvent = new EndTrackEvent(deltaTime);
+           
+            return endTrackEvent;
+
+        }
+
+        private MidiEvent ReadMidiEvent(long deltaTime, byte midiEventCode)
+        {
+            var midiEventType = (byte)(midiEventCode & MidiEventConstants.MASK_MIDI_EVENT_TYPE);
+            var channel = (byte)(midiEventCode & MidiEventConstants.MASK_MIDI_EVENT_CHANNEL);
+
+            MidiEvent midiEvent;
 
             switch (midiEventType)
             {
                 case MidiEventConstants.MIDI_EVENT_PROGRAM_CHANGE:
-                    return ReadProgramChangeEvent(channel);
+                    midiEvent = ReadProgramChangeEvent(deltaTime, channel);
+                    break;
+
+                case MidiEventConstants.MIDI_EVENT_NOTE_ON:
+                    midiEvent = ReadNoteOnEvent(deltaTime, channel);
+                    break;
+
+                case MidiEventConstants.MIDI_EVENT_NOTE_OFF:
+                    midiEvent = ReadNoteOffEvent(deltaTime, channel);
+                    break;
 
                 default:
-                    throw new NotImplementedException($"Midi Event {midiEventType} not implemented");
+                    _stream.Seek(-1, SeekOrigin.Current); //Step back so we can re-read what was mis-read as midiEventCode
+                    midiEvent = ReadMidiEvent(deltaTime, _runningStatus);
+                    break;
             }
+
+            _runningStatus = midiEventCode;
+
+            return midiEvent;
         }
 
-        private ProgramChangeEvent ReadProgramChangeEvent(byte channel)
+        private ProgramChangeEvent ReadProgramChangeEvent(long deltaTime, byte channel)
         {
 
             var intstrument = (byte)_stream.ReadByte();
 
-            var programChangeEvent = new ProgramChangeEvent();
+            var programChangeEvent = new ProgramChangeEvent(deltaTime);
             
             programChangeEvent.Channel = channel;
             programChangeEvent.Instrument = (MidiConstants.Instruments)(intstrument);
 
             return programChangeEvent;
+
+        }
+
+        private NoteOnEvent ReadNoteOnEvent(long deltaTime, byte channel)
+        {
+
+            var note = (byte)_stream.ReadByte();
+            var velocity = (byte)_stream.ReadByte();
+
+            var noteOnEvent = new NoteOnEvent(deltaTime);
+
+            noteOnEvent.Channel = channel;
+            noteOnEvent.Note = (MidiConstants.MidiNoteNumbers)(note);
+            noteOnEvent.Velocity = velocity;
+
+            return noteOnEvent;
+
+        }
+
+        private NoteOffEvent ReadNoteOffEvent(long deltaTime, byte channel)
+        {
+
+            var note = (byte)_stream.ReadByte();
+            var velocity = (byte)_stream.ReadByte();
+
+            var noteOffEvent = new NoteOffEvent(deltaTime);
+
+            noteOffEvent.Channel = channel;
+            noteOffEvent.Note = (MidiConstants.MidiNoteNumbers)(note);
+            noteOffEvent.Velocity = velocity;
+
+            return noteOffEvent;
 
         }
 

@@ -6,16 +6,19 @@ using System.Threading.Tasks;
 
 namespace Hearn.Midi.MidiData
 {
-    public class ProgramChangeEvent : MidiEvent
+    public class NoteOnEvent : MidiEvent
     {
-        public ProgramChangeEvent(long delta)
+
+        public NoteOnEvent(long delta)
            : base(delta)
         {
         }
 
         public int Channel { get; set; }
 
-        public MidiConstants.Instruments Instrument { get; set; }
+        public MidiConstants.MidiNoteNumbers Note { get; set; }
+
+        public byte Velocity { get; set; }
 
     }
 }

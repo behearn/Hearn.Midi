@@ -9,6 +9,11 @@ namespace Hearn.Midi.MidiData
     public class TempoEvent : MetaEvent
     {
 
+        public TempoEvent(long delta)
+            : base(delta)
+        {
+        }
+        
         public long MicroSecondsPerQuarterNote { get; set; }
 
         public long Tempo{ get => MidiEventConstants.MICROSECONDS_PER_MINUTE / MicroSecondsPerQuarterNote; }

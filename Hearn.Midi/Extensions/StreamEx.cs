@@ -43,7 +43,7 @@ namespace Hearn.Midi.Extensions
 
                 var nextValue = (byte)(nextByte & VALUE_MASK);
 
-                value <<= 8;
+                value <<= 7;
                 value |= nextValue;
             }
 

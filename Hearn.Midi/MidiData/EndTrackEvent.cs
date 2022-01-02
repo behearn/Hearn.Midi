@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace Hearn.Midi.MidiData
 {
-    public abstract class MetaEvent : BaseMidiEvent
+    public class EndTrackEvent : MetaEvent
     {
 
-        public MetaEvent(long delta)
-            : base(MidiDataTypes.MetaEvent, delta)
+        public EndTrackEvent(long delta)
+            : base(delta)
         {
         }
+        
+
     }
 }

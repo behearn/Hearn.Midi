@@ -6,15 +6,13 @@ using System.Threading.Tasks;
 
 namespace Hearn.Midi.MidiData
 {
-    public class MidiEvent : BaseMidiData
+    public class MidiEvent : BaseMidiEvent
     {
 
-        public MidiEvent()
-            : base(MidiDataTypes.MidiEvent)
+        public MidiEvent(long delta)
+            : base(MidiDataTypes.MidiEvent, delta)
         {
         }
-
-        public long Delta { get; set; }
 
     }
 }

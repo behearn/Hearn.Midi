@@ -189,5 +189,180 @@ namespace Hearn.Midi.Tests.MidiStreamReaderTests
             Assert.AreEqual(MidiConstants.Instruments.Bassoon, data[2].Instrument);
 
         }
+
+        [TestMethod]
+        public void MidiStreamReader_FormatSpecification0_NoteOnChannel3()
+        {
+
+            //Arrage
+
+            RepeatRead(7);
+
+            //Act
+
+            var data = new NoteOnEvent[2];
+            data[0] = _midiStreamReader.Read() as NoteOnEvent;
+            data[1] = _midiStreamReader.Read() as NoteOnEvent;
+
+            //Assert
+
+            Assert.IsInstanceOfType(data[0], typeof(NoteOnEvent));
+            Assert.AreEqual(MidiDataTypes.MidiEvent, data[0].MidiDataType);
+            Assert.AreEqual(0, data[0].Delta);
+            Assert.AreEqual(2, data[0].Channel);
+            Assert.AreEqual(MidiConstants.MidiNoteNumbers.C3, data[0].Note);
+            Assert.AreEqual(96, data[0].Velocity);
+
+            Assert.IsInstanceOfType(data[1], typeof(NoteOnEvent));
+            Assert.AreEqual(MidiDataTypes.MidiEvent, data[0].MidiDataType);
+            Assert.AreEqual(0, data[0].Delta);
+            Assert.AreEqual(2, data[1].Channel);
+            Assert.AreEqual(MidiConstants.MidiNoteNumbers.C4, data[1].Note);
+            Assert.AreEqual(96, data[1].Velocity);
+
+        }
+
+        [TestMethod]
+        public void MidiStreamReader_FormatSpecification0_NoteOnChannel2()
+        {
+
+            //Arrage
+
+            RepeatRead(9);
+
+            //Act
+            
+            var data = _midiStreamReader.Read() as NoteOnEvent;
+
+            //Assert
+
+            Assert.IsInstanceOfType(data, typeof(NoteOnEvent));
+            Assert.AreEqual(MidiDataTypes.MidiEvent, data.MidiDataType);
+            Assert.AreEqual(96, data.Delta);
+            Assert.AreEqual(1, data.Channel);
+            Assert.AreEqual(MidiConstants.MidiNoteNumbers.G4, data.Note);
+            Assert.AreEqual(64, data.Velocity);
+
+        }
+
+        [TestMethod]
+        public void MidiStreamReader_FormatSpecification0_NoteOnChannel1()
+        {
+
+            //Arrage
+
+            RepeatRead(10);
+
+            //Act
+
+            var data = _midiStreamReader.Read() as NoteOnEvent;
+
+            //Assert
+
+            Assert.IsInstanceOfType(data, typeof(NoteOnEvent));
+            Assert.AreEqual(MidiDataTypes.MidiEvent, data.MidiDataType);
+            Assert.AreEqual(96, data.Delta);
+            Assert.AreEqual(0, data.Channel);
+            Assert.AreEqual(MidiConstants.MidiNoteNumbers.E5, data.Note);
+            Assert.AreEqual(32, data.Velocity);
+
+        }
+
+        [TestMethod]
+        public void MidiStreamReader_FormatSpecification0_NoteOffChannel3()
+        {
+
+            //Arrage
+
+            RepeatRead(11);
+
+            //Act
+
+            var data = new NoteOffEvent[2];
+            data[0] = _midiStreamReader.Read() as NoteOffEvent;
+            data[1] = _midiStreamReader.Read() as NoteOffEvent;
+
+            //Assert
+
+            Assert.IsInstanceOfType(data[0], typeof(NoteOffEvent));
+            Assert.AreEqual(MidiDataTypes.MidiEvent, data[0].MidiDataType);
+            Assert.AreEqual(192, data[0].Delta);
+            Assert.AreEqual(2, data[0].Channel);
+            Assert.AreEqual(MidiConstants.MidiNoteNumbers.C3, data[0].Note);
+            Assert.AreEqual(64, data[0].Velocity);
+
+            Assert.IsInstanceOfType(data[1], typeof(NoteOffEvent));
+            Assert.AreEqual(MidiDataTypes.MidiEvent, data[0].MidiDataType);
+            Assert.AreEqual(192, data[0].Delta);
+            Assert.AreEqual(2, data[1].Channel);
+            Assert.AreEqual(MidiConstants.MidiNoteNumbers.C4, data[1].Note);
+            Assert.AreEqual(64, data[1].Velocity);
+
+        }
+
+        [TestMethod]
+        public void MidiStreamReader_FormatSpecification0_NoteOffChannel2()
+        {
+
+            //Arrage
+
+            RepeatRead(13);
+
+            //Act
+
+            var data = _midiStreamReader.Read() as NoteOffEvent;
+
+            //Assert
+
+            Assert.IsInstanceOfType(data, typeof(NoteOffEvent));
+            Assert.AreEqual(MidiDataTypes.MidiEvent, data.MidiDataType);
+            Assert.AreEqual(0, data.Delta);
+            Assert.AreEqual(1, data.Channel);
+            Assert.AreEqual(MidiConstants.MidiNoteNumbers.G4, data.Note);
+            Assert.AreEqual(64, data.Velocity);
+
+        }
+
+        [TestMethod]
+        public void MidiStreamReader_FormatSpecification0_NoteOffChannel1()
+        {
+
+            //Arrage
+
+            RepeatRead(14);
+
+            //Act
+
+            var data = _midiStreamReader.Read() as NoteOffEvent;
+
+            //Assert
+
+            Assert.IsInstanceOfType(data, typeof(NoteOffEvent));
+            Assert.AreEqual(MidiDataTypes.MidiEvent, data.MidiDataType);
+            Assert.AreEqual(0, data.Delta);
+            Assert.AreEqual(0, data.Channel);
+            Assert.AreEqual(MidiConstants.MidiNoteNumbers.E5, data.Note);
+            Assert.AreEqual(64, data.Velocity);
+
+        }
+
+        [TestMethod]
+        public void MidiStreamReader_FormatSpecification0_ReadEndTrack()
+        {
+
+            //Arrage
+
+            RepeatRead(15);
+
+            //Act
+
+            var data = _midiStreamReader.Read() as EndTrackEvent;
+
+            //Assert
+
+            Assert.IsInstanceOfType(data, typeof(EndTrackEvent));
+
+        }
+
     }
 }
