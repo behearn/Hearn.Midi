@@ -20,5 +20,10 @@ namespace Hearn.Midi.MidiData
 
         public byte Velocity { get; set; }
 
+        public override string ToString()
+        {
+            return $"NoteOff Delta {Delta} Channel {Channel + 1} {Note.ToString()} Velocity {Velocity}";
+        }
+
     }
 }

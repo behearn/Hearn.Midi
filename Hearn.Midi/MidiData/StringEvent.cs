@@ -17,5 +17,10 @@ namespace Hearn.Midi.MidiData
 
         public string Text { get; set; }
 
+        public override string ToString()
+        {
+            return $"String Delta {Delta} {StringType} {Text}";
+        }
+
     }
 }

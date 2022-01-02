@@ -20,5 +20,9 @@ namespace Hearn.Midi.MidiData
 
         public int Division { get; set; }
 
+        public override string ToString()
+        {
+            return $"MIDI Header {Format} {Tracks} tracks ({Division} ticks per quarter note)";
+        }
     }
 }

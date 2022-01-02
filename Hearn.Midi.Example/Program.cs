@@ -21,6 +21,23 @@ namespace Hearn.Midi.Example
                 File.Delete(FILENAME);
             }
 
+            Console.WriteLine($"Writing {FILENAME}...");
+
+            WriteMidiFile();
+
+            Console.WriteLine($"{FILENAME} written");
+
+            Console.WriteLine("Press any key to read file");
+            Console.ReadKey();
+
+            ReadMidiFile();
+
+            Console.WriteLine($"{FILENAME} read");
+
+        }
+
+        static void WriteMidiFile()
+        {
             var midiStream = new FileStream(FILENAME, FileMode.OpenOrCreate);
 
             using (var midiStreamWriter = new MidiStreamWriter(midiStream))
@@ -48,7 +65,6 @@ namespace Hearn.Midi.Example
 
                 //using will call Dispose which automatically flushes and closes the stream
             }
-
         }
 
         static void WriteTrack1(MidiStreamWriter midiStreamWriter)
@@ -606,6 +622,24 @@ namespace Hearn.Midi.Example
                 new MidiNote() { Note = MidiNoteNumbers.CSDF4, Velocity = VELOCITY_SOFT, Duration = duration },
                 new MidiNote() { Note = MidiNoteNumbers.E3, Velocity = VELOCITY_SOFT, Duration = duration }
             };
+        }
+
+        static void ReadMidiFile()
+        {
+
+            var fileStream = new FileStream(FILENAME, FileMode.Open, FileAccess.Read);  
+
+            using (var midiStreamReader = new MidiStreamReader(fileStream))
+            {
+
+                var midiData = midiStreamReader.Read();
+                while(midiData != null)
+                {
+                    Console.WriteLine(midiData);
+                    midiData = midiStreamReader.Read();
+                }
+
+            }
         }
     }
 }

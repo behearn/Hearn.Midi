@@ -17,5 +17,9 @@ namespace Hearn.Midi.MidiData
 
         public MidiConstants.Instruments Instrument { get; set; }
 
+        public override string ToString()
+        {
+            return $"ProgramChange Delta {Delta} Channel {Channel + 1} {Instrument.ToString()}";
+        }
     }
 }

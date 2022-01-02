@@ -22,5 +22,10 @@ namespace Hearn.Midi.MidiData
 
         public byte ThirtySecondNotesPerClock { get; set; }
 
+        public override string ToString()
+        {
+            return $"Time Signature Delta {Delta} {TopNumber}:{BottomNumber} (Midi Clocks {MidiClocksPerMetronome} 32nds per quarter note {ThirtySecondNotesPerClock})";
+        }
+
     }
 }

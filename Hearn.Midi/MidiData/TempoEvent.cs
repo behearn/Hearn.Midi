@@ -18,5 +18,9 @@ namespace Hearn.Midi.MidiData
 
         public long Tempo{ get => MidiEventConstants.MICROSECONDS_PER_MINUTE / MicroSecondsPerQuarterNote; }
 
+        public override string ToString()
+        {
+            return $"Temp Delta {Delta} {Tempo} bpm";
+        }
     }
 }

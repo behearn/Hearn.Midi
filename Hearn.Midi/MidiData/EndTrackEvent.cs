@@ -13,7 +13,11 @@ namespace Hearn.Midi.MidiData
             : base(delta)
         {
         }
-        
+
+        public override string ToString()
+        {
+            return $"End Track Delta {Delta}";
+        }
 
     }
 }

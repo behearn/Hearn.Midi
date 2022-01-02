@@ -18,5 +18,9 @@ namespace Hearn.Midi.MidiData
 
         public long Length { get; set; }
 
+        public override string ToString()
+        {
+            return $"Start Track #{TrackNo}";
+        }
     }
 }

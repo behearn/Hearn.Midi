@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Hearn.Midi
 {
-    public class MidiStreamReader
+    public class MidiStreamReader : IDisposable
     {
 
         Stream _stream;
@@ -26,7 +26,11 @@ namespace Hearn.Midi
 
         public BaseMidiData Read()
         {
-            if (!_headerRead)
+            if (_stream.Position == _stream.Length)
+            {
+                return null;
+            }
+            else if (!_headerRead)
             {
                 return ReadHeaderChunk();
             }
@@ -258,6 +262,9 @@ namespace Hearn.Midi
 
         private MidiEvent ReadMidiEvent(long deltaTime, byte midiEventCode)
         {
+
+            var trackRunningStatus = true;
+
             var midiEventType = (byte)(midiEventCode & MidiEventConstants.MASK_MIDI_EVENT_TYPE);
             var channel = (byte)(midiEventCode & MidiEventConstants.MASK_MIDI_EVENT_CHANNEL);
 
@@ -280,10 +287,14 @@ namespace Hearn.Midi
                 default:
                     _stream.Seek(-1, SeekOrigin.Current); //Step back so we can re-read what was mis-read as midiEventCode
                     midiEvent = ReadMidiEvent(deltaTime, _runningStatus);
+                    trackRunningStatus = false;
                     break;
             }
 
-            _runningStatus = midiEventCode;
+            if (trackRunningStatus)
+            {
+                _runningStatus = midiEventCode;
+            }
 
             return midiEvent;
         }
@@ -334,5 +345,9 @@ namespace Hearn.Midi
 
         }
 
+        public void Dispose()
+        {
+            _stream.Close();
+        }
     }
 }
