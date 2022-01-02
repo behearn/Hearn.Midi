@@ -24,17 +24,6 @@ namespace Hearn.Midi
 
         List<PlayingNote> _playingNotes;        
 
-        public enum StringTypes
-        {
-            ArbitraryText = 0x01,
-            CopyrightNotice = 0x02,
-            TrackName = 0x03,
-            InstrumentName = 0x04,
-            Lyric = 0x05,
-            Marker = 0x06,
-            CuePoint = 0x07
-        }
-
         public enum NoteDurations
         {
             HemidemisemiQuaver = 6,
@@ -222,7 +211,8 @@ namespace Hearn.Midi
             //End of track = 00 FF 2F 00
             _stream.WriteByte(0x00); //Delta time
             _stream.WriteByte(META_EVENT);
-            _stream.WriteInt(META_EVENT_END_OF_TRACK);
+            _stream.WriteByte(META_EVENT_END_OF_TRACK);
+            _stream.WriteByte(0x00);
 
             _lastTrack = _currentTrack;
             _currentTrack = -1;
@@ -289,7 +279,8 @@ namespace Hearn.Midi
 
             //Tempo = FF 51 03
             _stream.WriteByte(META_EVENT);
-            _stream.WriteInt(META_EVENT_SET_TEMPO);
+            _stream.WriteByte(META_EVENT_SET_TEMPO);
+            _stream.WriteByte(0x03); //length
 
             _stream.Write24bitInt(tempo);
 
@@ -320,9 +311,10 @@ namespace Hearn.Midi
 
             _stream.WriteByte(0x00); //Delta time
 
-            //Time signature = FF 58 
+            //Time signature = FF 58 04
             _stream.WriteByte(META_EVENT);
-            _stream.WriteInt(META_EVENT_TIME_SIGNATURE);
+            _stream.WriteByte(META_EVENT_TIME_SIGNATURE);
+            _stream.WriteByte(0x04); //length
 
             _stream.WriteByte(topNumber);
 

@@ -147,7 +147,7 @@ namespace Hearn.Midi
         private MetaEvent ReadMetaEvent(long deltaTime)
         {
 
-            var metaEventType = _stream.ReadInt();
+            var metaEventType = _stream.ReadByte();
 
             switch(metaEventType)
             {
@@ -156,6 +156,15 @@ namespace Hearn.Midi
 
                 case MidiEventConstants.META_EVENT_SET_TEMPO:
                     return ReadTempoEvent(deltaTime);
+
+                case MidiEventConstants.META_EVENT_TEXT:
+                case MidiEventConstants.META_EVENT_COPYRIGHT_NOTICE:
+                case MidiEventConstants.META_EVENT_TRACK_NAME:
+                case MidiEventConstants.META_EVENT_INSTRUMENT_NAME:
+                case MidiEventConstants.META_EVENT_LYRIC:
+                case MidiEventConstants.META_EVENT_MARKER:
+                case MidiEventConstants.META_EVENT_CUE_POINT:
+                    return ReadStringEvent(deltaTime);
 
                 case MidiEventConstants.META_EVENT_END_OF_TRACK:
                     return ReadEndTrack(deltaTime);
@@ -169,7 +178,13 @@ namespace Hearn.Midi
         private TimeSignatureEvent ReadTimeSignatureEvent(long deltaTime)
         {
 
-            var bytes = new byte[4];
+            var length = _stream.ReadByte();
+            if (length != 4)
+            {
+                throw new InvalidDataException($"Time signature event length incorrect (Expected 4 Actual {length}");
+            }
+
+            var bytes = new byte[length];
             _stream.Read(bytes, 0, bytes.Length);
 
             var timeSignatureEvent = new TimeSignatureEvent(deltaTime);
@@ -186,6 +201,12 @@ namespace Hearn.Midi
         private TempoEvent ReadTempoEvent(long deltaTime)
         {
 
+            var length = _stream.ReadByte();
+            if (length != 3)
+            {
+                throw new InvalidDataException($"Tempo event length incorrect (Expected 3 Actual {length}");
+            }
+
             var microSecondsPerQuarterNote = _stream.Read24bitInt();
 
             var tempoEvent = new TempoEvent(deltaTime);
@@ -196,8 +217,35 @@ namespace Hearn.Midi
 
         }
 
+        private StringEvent ReadStringEvent(long deltaTime)
+        {
+            string text = "";
+
+            var length = _stream.ReadByte();
+            
+            if (length > 0)
+            {
+                var bytes = new byte[length];
+                _stream.Read(bytes, 0, length);
+                text = Encoding.ASCII.GetString(bytes);
+            }
+
+            var stringEvent = new StringEvent(deltaTime);
+
+            stringEvent.Text = text;
+
+            return stringEvent;
+
+        }
+
         private EndTrackEvent ReadEndTrack(long deltaTime)
         {
+
+            var length = _stream.ReadByte();
+            if (length != 0)
+            {
+                throw new InvalidDataException($"End track event length incorrect (Expected 0 Actual {length}");
+            }
 
             _inTrack = false;
             _runningStatus = 0x00;

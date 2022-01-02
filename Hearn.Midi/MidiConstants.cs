@@ -16,6 +16,17 @@ namespace Hearn.Midi
             MultiSequentialTracks = 2
         }
 
+        public enum StringTypes
+        {
+            ArbitraryText = 0x01,
+            CopyrightNotice = 0x02,
+            TrackName = 0x03,
+            InstrumentName = 0x04,
+            Lyric = 0x05,
+            Marker = 0x06,
+            CuePoint = 0x07
+        }
+
         public enum InstrumentGroups
         {
             Piano,
