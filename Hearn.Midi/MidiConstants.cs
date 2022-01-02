@@ -9,6 +9,13 @@ namespace Hearn.Midi
     public class MidiConstants
     {
 
+        public enum Formats
+        {
+            SingleTrack = 0,
+            MultiSimultaneousTracks = 1,
+            MultiSequentialTracks = 2
+        }
+
         public enum InstrumentGroups
         {
             Piano,

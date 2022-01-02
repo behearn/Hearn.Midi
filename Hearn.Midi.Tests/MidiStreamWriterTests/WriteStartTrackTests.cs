@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Hearn.Midi.MidiConstants;
 
 namespace Hearn.Midi.Tests.MidiStreamWriterTests
 {
@@ -30,7 +31,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
 
             var bytes = new byte[4];
 
-            _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.SingleTrack, 1);
+            _midiStreamWriter.WriteHeader(Formats.SingleTrack, 1);
 
             //Act
 
@@ -54,7 +55,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
 
             var bytes = new byte[4];
 
-            _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.SingleTrack, 1);
+            _midiStreamWriter.WriteHeader(Formats.SingleTrack, 1);
 
             //Act
 
@@ -96,7 +97,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
 
             //Arrange
 
-            _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.MultiSimultaneousTracks, 3);
+            _midiStreamWriter.WriteHeader(Formats.MultiSimultaneousTracks, 3);
 
             _midiStreamWriter.WriteStartTrack();
             _midiStreamWriter.WriteEndTrack();
@@ -121,7 +122,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
 
             //Arrange
 
-            _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.MultiSimultaneousTracks, 2);
+            _midiStreamWriter.WriteHeader(Formats.MultiSimultaneousTracks, 2);
 
             _midiStreamWriter.WriteStartTrack();
             _midiStreamWriter.WriteEndTrack();
@@ -147,7 +148,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
 
             //Arrange
 
-            _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.MultiSimultaneousTracks, 2);
+            _midiStreamWriter.WriteHeader(Formats.MultiSimultaneousTracks, 2);
 
             //Act
 
@@ -166,7 +167,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
             //Arrange
 
             _midiStreamWriter
-                .WriteHeader(MidiStreamWriter.Formats.MultiSimultaneousTracks, 2)
+                .WriteHeader(Formats.MultiSimultaneousTracks, 2)
                 .WriteStartTrack()
                 .WriteEndTrack();
 

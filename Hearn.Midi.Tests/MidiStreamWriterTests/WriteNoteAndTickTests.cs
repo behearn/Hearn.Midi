@@ -23,7 +23,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
             _stream = new MemoryStream();
             _midiStreamWriter = new MidiStreamWriter(_stream);
 
-            _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.MultiSimultaneousTracks, 2);
+            _midiStreamWriter.WriteHeader(Formats.MultiSimultaneousTracks, 2);
 
         }
 

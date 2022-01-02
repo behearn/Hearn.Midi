@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Hearn.Midi.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,7 +26,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
             _stream = new MemoryStream();
             _midiStreamWriter = new MidiStreamWriter(_stream);
 
-            _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.MultiSimultaneousTracks, 2);
+            _midiStreamWriter.WriteHeader(Formats.MultiSimultaneousTracks, 2);
 
             _chord = new List<MidiNote>()
             {

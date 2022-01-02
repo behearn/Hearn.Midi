@@ -1,11 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Hearn.Midi.Extensions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hearn.Midi.Tests.LongExTests
+namespace Hearn.Midi.Tests.ExtensionsTests.LongExTests
 {
     [TestClass]
     public class ToVariableLengthQuantityTests

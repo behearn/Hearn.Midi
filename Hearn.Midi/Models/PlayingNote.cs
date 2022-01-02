@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Hearn.Midi.MidiConstants;
 
-namespace Hearn.Midi
+namespace Hearn.Midi.Models
 {
     class PlayingNote
     {

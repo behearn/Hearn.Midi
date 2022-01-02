@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Hearn.Midi.Extensions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hearn.Midi.Tests.StreamExTests
+namespace Hearn.Midi.Tests.ExtensionsTests.StreamExTests
 {
     [TestClass]
     public class Write24bitIntTests

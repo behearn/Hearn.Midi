@@ -1,22 +1,17 @@
-﻿using System;
+﻿using Hearn.Midi.Extensions;
+using Hearn.Midi.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using static Hearn.Midi.MidiConstants;
+using static Hearn.Midi.MidiEventConstants;
 
 namespace Hearn.Midi
 {
     public class MidiStreamWriter : IDisposable
     {
-
-        const byte META_EVENT = 0xFF;
-        const int META_EVENT_END_OF_TRACK = 0x2F00;
-        const int META_EVENT_SET_TEMPO = 0x5103;
-        const int META_EVENT_TIME_SIGNATURE = 0x5804;
-
-        const byte NOTE_ON_EVENT = 0x90;
-        const byte NOTE_OFF_EVENT = 0x80;
 
         Stream _stream;
         int _tracks = -1;
@@ -27,14 +22,7 @@ namespace Hearn.Midi
         long _currentTick;
         long _awaitedTick;
 
-        List<PlayingNote> _playingNotes;
-
-        public enum Formats
-        {
-            SingleTrack = 0,
-            MultiSimultaneousTracks = 1,
-            MultiSequentialTracks = 2
-        }
+        List<PlayingNote> _playingNotes;        
 
         public enum StringTypes
         {

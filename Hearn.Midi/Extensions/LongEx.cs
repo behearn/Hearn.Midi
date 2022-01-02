@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hearn.Midi
+namespace Hearn.Midi.Extensions
 {
     public static class LongEx
     {

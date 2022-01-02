@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using static Hearn.Midi.MidiConstants;
 using static Hearn.Midi.MidiStreamWriter;
 
-namespace Hearn.Midi
+namespace Hearn.Midi.Models
 {
     public class MidiNote
     {

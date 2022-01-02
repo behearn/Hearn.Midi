@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Hearn.Midi.MidiConstants;
 
 namespace Hearn.Midi.Tests.MidiStreamWriterTests
 {
@@ -32,7 +33,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
 
             //Act
 
-            _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.SingleTrack, 1);
+            _midiStreamWriter.WriteHeader(Formats.SingleTrack, 1);
 
             //Assert
 
@@ -54,7 +55,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
 
             //Act
 
-            _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.SingleTrack, 1);
+            _midiStreamWriter.WriteHeader(Formats.SingleTrack, 1);
 
             //Assert
 
@@ -79,7 +80,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
 
             //Act
 
-            _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.SingleTrack, 1);
+            _midiStreamWriter.WriteHeader(Formats.SingleTrack, 1);
 
             //Assert
 
@@ -101,7 +102,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
 
             //Act
 
-            _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.MultiSimultaneousTracks, 2);
+            _midiStreamWriter.WriteHeader(Formats.MultiSimultaneousTracks, 2);
 
             //Assert
 
@@ -123,7 +124,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
 
             //Act
 
-            _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.MultiSequentialTracks, 2);
+            _midiStreamWriter.WriteHeader(Formats.MultiSequentialTracks, 2);
 
             //Assert
 
@@ -145,7 +146,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
 
             //Act
 
-            _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.MultiSimultaneousTracks, 4);
+            _midiStreamWriter.WriteHeader(Formats.MultiSimultaneousTracks, 4);
 
             //Assert
 
@@ -167,7 +168,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
 
             //Act
 
-            _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.SingleTrack, 1);
+            _midiStreamWriter.WriteHeader(Formats.SingleTrack, 1);
 
             //Assert
 
@@ -190,7 +191,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
             //Act
 
             var ex = Assert.ThrowsException<ArgumentException>(() =>
-                _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.SingleTrack, tracks)
+                _midiStreamWriter.WriteHeader(Formats.SingleTrack, tracks)
             );
 
             //Assert
@@ -210,7 +211,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
             //Act
 
             var ex = Assert.ThrowsException<ArgumentException>(() =>
-                _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.SingleTrack, tracks)
+                _midiStreamWriter.WriteHeader(Formats.SingleTrack, tracks)
             );
 
             //Assert
@@ -229,7 +230,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
 
             //Act
 
-            _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.MultiSimultaneousTracks, tracks);
+            _midiStreamWriter.WriteHeader(Formats.MultiSimultaneousTracks, tracks);
 
             //Assert
 
@@ -247,7 +248,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
 
             //Act
 
-            _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.MultiSequentialTracks, tracks);
+            _midiStreamWriter.WriteHeader(Formats.MultiSequentialTracks, tracks);
 
             //Assert
 
@@ -261,12 +262,12 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
 
             //Arrange
             
-            _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.SingleTrack, 1);
+            _midiStreamWriter.WriteHeader(Formats.SingleTrack, 1);
 
             //Act
 
             var ex = Assert.ThrowsException<InvalidOperationException>(() =>
-                _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.SingleTrack, 1)
+                _midiStreamWriter.WriteHeader(Formats.SingleTrack, 1)
             );
 
             //Assert
@@ -284,7 +285,7 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
             
             //Act
 
-            var msw = _midiStreamWriter.WriteHeader(MidiStreamWriter.Formats.MultiSimultaneousTracks, 2);
+            var msw = _midiStreamWriter.WriteHeader(Formats.MultiSimultaneousTracks, 2);
 
             //Assert           
 

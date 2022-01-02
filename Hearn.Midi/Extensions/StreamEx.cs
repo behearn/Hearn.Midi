@@ -5,10 +5,50 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hearn.Midi
+namespace Hearn.Midi.Extensions
 {
     public static class StreamEx
     {
+
+        public static int ReadInt(this Stream stream)
+        {
+            var bytes = new byte[2];
+            stream.Read(bytes, 0, 2);
+            var value = bytes[0] << 8 | bytes[1];
+            return value;
+        }
+
+        public static long ReadLong(this Stream stream)
+        {
+            var bytes = new byte[4];
+            stream.Read(bytes, 0, 4);
+            var value = bytes[0] << 24 | bytes[1] << 16 | bytes[2] << 8 | bytes[3];
+            return value;
+        }
+
+        public static long ReadVariableLengthQuantity(this Stream stream)
+        {
+            long value;
+
+            var KEEP_READING_MASK = 0b_10000000;
+            var VALUE_MASK = 0b_01111111;
+
+            var nextByte = (byte)stream.ReadByte();
+
+            value = nextByte & VALUE_MASK;
+
+            while ((nextByte & KEEP_READING_MASK) == KEEP_READING_MASK)
+            {
+                nextByte = (byte)stream.ReadByte();
+
+                var nextValue = (byte)(nextByte & VALUE_MASK);
+
+                value <<= 8;
+                value |= nextValue;
+            }
+
+            return value;
+        }
 
         public static void WriteInt(this Stream stream, int value)
         {
