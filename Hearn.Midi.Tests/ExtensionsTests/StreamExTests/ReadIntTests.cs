@@ -105,7 +105,7 @@ namespace Hearn.Midi.Tests.ExtensionsTests.StreamExTests
         }
 
         [TestMethod]
-        public void StreamEx_WriteInt_16383()
+        public void StreamEx_ReadInt_16383()
         {
 
             //Arrange

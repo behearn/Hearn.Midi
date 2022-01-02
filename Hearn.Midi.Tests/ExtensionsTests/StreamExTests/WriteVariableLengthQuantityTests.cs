@@ -57,14 +57,14 @@ namespace Hearn.Midi.Tests.ExtensionsTests.StreamExTests
         {
 
             //Arrange
-            var value = 0x7C;
+            var value = 0x7F;
 
             //Act
             _stream.WriteVariableLengthQuantity(value);
 
             //Assert
             _stream.Seek(0, SeekOrigin.Begin);
-            Assert.AreEqual(0x7C, _stream.ReadByte());
+            Assert.AreEqual(0x7F, _stream.ReadByte());
 
         }
 
