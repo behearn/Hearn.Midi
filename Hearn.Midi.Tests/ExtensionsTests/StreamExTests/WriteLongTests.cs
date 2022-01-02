@@ -56,7 +56,7 @@ namespace Hearn.Midi.Tests.ExtensionsTests.StreamExTests
         }
 
         [TestMethod]
-        public void StreamEx_WriteInt_127()
+        public void StreamEx_WriteLong_127()
         {
 
             //Arrange
@@ -75,7 +75,7 @@ namespace Hearn.Midi.Tests.ExtensionsTests.StreamExTests
         }
 
         [TestMethod]
-        public void StreamEx_WriteInt_8192()
+        public void StreamEx_WriteLong_8192()
         {
 
             //Arrange
@@ -94,7 +94,7 @@ namespace Hearn.Midi.Tests.ExtensionsTests.StreamExTests
         }
 
         [TestMethod]
-        public void StreamEx_WriteInt_16383()
+        public void StreamEx_WriteLong_16383()
         {
 
             //Arrange
@@ -113,7 +113,7 @@ namespace Hearn.Midi.Tests.ExtensionsTests.StreamExTests
         }
 
         [TestMethod]
-        public void StreamEx_WriteInt_2097151()
+        public void StreamEx_WriteLong_2097151()
         {
 
             //Arrange
@@ -132,7 +132,7 @@ namespace Hearn.Midi.Tests.ExtensionsTests.StreamExTests
         }
 
         [TestMethod]
-        public void StreamEx_WriteInt_268435455()
+        public void StreamEx_WriteLong_268435455()
         {
 
             //Arrange
