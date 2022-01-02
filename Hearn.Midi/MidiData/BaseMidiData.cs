@@ -16,7 +16,7 @@ namespace Hearn.Midi.MidiData
             HeaderChunk,
             TrackChunk,
             MetaEvent,
-            NoteEvent
+            MidiEvent
         }
 
         public BaseMidiData(MidiDataTypes midiDataTypes)

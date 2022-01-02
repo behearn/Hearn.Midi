@@ -50,6 +50,15 @@ namespace Hearn.Midi.Extensions
             return value;
         }
 
+
+        public static long Read24bitInt(this Stream stream)
+        {
+            var bytes = new byte[3];
+            stream.Read(bytes, 0, 3);
+            var value = bytes[0] << 16 | bytes[1] << 8 | bytes[2];
+            return value;
+        }
+
         public static void WriteInt(this Stream stream, int value)
         {
 

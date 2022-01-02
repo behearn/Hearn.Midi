@@ -130,15 +130,15 @@ namespace Hearn.Midi
             var deltaTime = _stream.ReadVariableLengthQuantity();
 
             //Cast straight to byte as we've validated the stream length already
-            var midiEventType = (byte)_stream.ReadByte(); 
+            var eventType = (byte)_stream.ReadByte(); 
             
-            switch (midiEventType)
+            switch (eventType)
             {
                 case MidiEventConstants.META_EVENT:
                     return ReadMetaEventChunk();
 
                 default:
-                    return ReadMidiEvent(midiEventType);
+                    return ReadMidiEvent(eventType);
             }
 
         }
@@ -151,7 +151,10 @@ namespace Hearn.Midi
             switch(metaEventType)
             {
                 case MidiEventConstants.META_EVENT_TIME_SIGNATURE:
-                    return ReadTimeSignatureChunk();
+                    return ReadTimeSignatureEvent();
+
+                case MidiEventConstants.META_EVENT_SET_TEMPO:
+                    return ReadTempoEvent();
 
                 default:
                     throw new NotImplementedException($"Meta Event {metaEventType} not implemented");
@@ -159,26 +162,63 @@ namespace Hearn.Midi
 
         }
 
-        private TimeSignatureEvent ReadTimeSignatureChunk()
+        private TimeSignatureEvent ReadTimeSignatureEvent()
         {
 
             var bytes = new byte[4];
             _stream.Read(bytes, 0, bytes.Length);
 
-            var timeSignatureChunk = new TimeSignatureEvent();
+            var timeSignatureEvent = new TimeSignatureEvent();
 
-            timeSignatureChunk.TopNumber = bytes[0];
-            timeSignatureChunk.BottomNumber = (byte)Math.Pow(bytes[1], 2);
-            timeSignatureChunk.MidiClocksPerMetronome = bytes[2];
-            timeSignatureChunk.ThirtySecondNotesPerClock = bytes[3];
+            timeSignatureEvent.TopNumber = bytes[0];
+            timeSignatureEvent.BottomNumber = (byte)Math.Pow(bytes[1], 2);
+            timeSignatureEvent.MidiClocksPerMetronome = bytes[2];
+            timeSignatureEvent.ThirtySecondNotesPerClock = bytes[3];
 
-            return timeSignatureChunk;
+            return timeSignatureEvent;
 
         }
 
-        private BaseMidiData ReadMidiEvent(byte midiEventType)
+        private TempoEvent ReadTempoEvent()
         {
-            throw new NotImplementedException();
+
+            var microSecondsPerQuarterNote = _stream.Read24bitInt();
+
+            var tempoEvent = new TempoEvent();
+
+            tempoEvent.MicroSecondsPerQuarterNote = microSecondsPerQuarterNote;
+
+            return tempoEvent;
+
+        }
+
+        private MidiEvent ReadMidiEvent(byte midiEvent)
+        {
+            var midiEventType = (byte)(midiEvent & MidiEventConstants.MASK_MIDI_EVENT_TYPE);
+            var channel = (byte)(midiEvent & MidiEventConstants.MASK_MIDI_EVENT_CHANNEL);
+
+            switch (midiEventType)
+            {
+                case MidiEventConstants.MIDI_EVENT_PROGRAM_CHANGE:
+                    return ReadProgramChangeEvent(channel);
+
+                default:
+                    throw new NotImplementedException($"Midi Event {midiEventType} not implemented");
+            }
+        }
+
+        private ProgramChangeEvent ReadProgramChangeEvent(byte channel)
+        {
+
+            var intstrument = (byte)_stream.ReadByte();
+
+            var programChangeEvent = new ProgramChangeEvent();
+            
+            programChangeEvent.Channel = channel;
+            programChangeEvent.Instrument = (MidiConstants.Instruments)(intstrument);
+
+            return programChangeEvent;
+
         }
 
     }

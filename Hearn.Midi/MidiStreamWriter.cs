@@ -282,9 +282,8 @@ namespace Hearn.Midi
                 throw new ArgumentException("Tempo cannot be zero");
             }
            
-            const long MICROSECONDS_PER_MINUTE = 60000000;
-
-            var tempo = MICROSECONDS_PER_MINUTE / bpm;
+            
+            var tempo = MidiEventConstants.MICROSECONDS_PER_MINUTE / bpm;
 
             _stream.WriteByte(0x00); //Delta time
 
@@ -361,8 +360,6 @@ namespace Hearn.Midi
         public MidiStreamWriter WriteChangeInstrument(byte channel, Instruments instrument)
         {
 
-            const byte PROGRAM_CHANGE_EVENT = 0xC0;
-
             if (_currentTrack == -1)
             {
                 throw new InvalidOperationException("WriteChangeInstrument must be called after WriteStartTrack");
@@ -373,7 +370,7 @@ namespace Hearn.Midi
                 throw new ArgumentException("channel must be in the range 0..15");
             }
 
-            var eventCode = (byte)(PROGRAM_CHANGE_EVENT | channel);
+            var eventCode = (byte)(MidiEventConstants.MIDI_EVENT_PROGRAM_CHANGE | channel);
 
             _stream.WriteByte(0x00); //Delta time
             _stream.WriteByte(eventCode);
@@ -465,7 +462,7 @@ namespace Hearn.Midi
 
             var deltaTime = CalculateDelta();
 
-            var eventCode = (byte)(NOTE_ON_EVENT | channel);
+            var eventCode = (byte)(MIDI_EVENT_NOTE_ON | channel);
 
             _stream.WriteVariableLengthQuantity(deltaTime);
             _stream.WriteByte(eventCode);
@@ -512,7 +509,7 @@ namespace Hearn.Midi
 
             var deltaTime = CalculateDelta();
 
-            var eventCode = (byte)(NOTE_ON_EVENT | channel);
+            var eventCode = (byte)(MIDI_EVENT_NOTE_ON | channel);
 
             _stream.WriteVariableLengthQuantity(deltaTime);
             _stream.WriteByte(eventCode);
@@ -625,7 +622,7 @@ namespace Hearn.Midi
 
                     if (i == 0 || lastChannel != note.Channel)
                     {                        
-                        var eventCode = (byte)(NOTE_OFF_EVENT | note.Channel);                        
+                        var eventCode = (byte)(MIDI_EVENT_NOTE_OFF | note.Channel);                        
                         _stream.WriteByte(eventCode);
                         lastChannel = note.Channel;                        
                     }

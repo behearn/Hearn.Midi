@@ -64,6 +64,14 @@ namespace Hearn.Midi.Tests.MidiStreamReaderTests
 
         }
 
+        private void RepeatRead(int noOfReads)
+        {
+            for (var i = 0; i < noOfReads; i++)
+            {
+                _midiStreamReader.Read();
+            }
+        }
+
         [TestMethod]
         public void MidiStreamReader_FormatSpecification0_ReadHeader()
         {
@@ -72,15 +80,15 @@ namespace Hearn.Midi.Tests.MidiStreamReaderTests
 
             //Act
 
-            var chunk = _midiStreamReader.Read() as HeaderChunk;
+            var data = _midiStreamReader.Read() as HeaderChunk;
 
             //Assert
 
-            Assert.IsInstanceOfType(chunk, typeof(HeaderChunk));
-            Assert.AreEqual(MidiDataTypes.HeaderChunk, chunk.MidiDataType);
-            Assert.AreEqual(Formats.SingleTrack, chunk.Format);
-            Assert.AreEqual(1, chunk.Tracks);
-            Assert.AreEqual(96, chunk.Division);
+            Assert.IsInstanceOfType(data, typeof(HeaderChunk));
+            Assert.AreEqual(MidiDataTypes.HeaderChunk, data.MidiDataType);
+            Assert.AreEqual(Formats.SingleTrack, data.Format);
+            Assert.AreEqual(1, data.Tracks);
+            Assert.AreEqual(96, data.Division);
 
         }
 
@@ -94,14 +102,14 @@ namespace Hearn.Midi.Tests.MidiStreamReaderTests
 
             //Act
 
-            var chunk = _midiStreamReader.Read() as TrackChunk;
+            var data = _midiStreamReader.Read() as TrackChunk;
 
             //Assert
 
-            Assert.IsInstanceOfType(chunk, typeof(TrackChunk));
-            Assert.AreEqual(MidiDataTypes.TrackChunk, chunk.MidiDataType);
-            Assert.AreEqual(1, chunk.TrackNo);
-            Assert.AreEqual(59, chunk.Length);
+            Assert.IsInstanceOfType(data, typeof(TrackChunk));
+            Assert.AreEqual(MidiDataTypes.TrackChunk, data.MidiDataType);
+            Assert.AreEqual(1, data.TrackNo);
+            Assert.AreEqual(59, data.Length);
 
         }
 
@@ -111,23 +119,75 @@ namespace Hearn.Midi.Tests.MidiStreamReaderTests
 
             //Arrage
 
-            _midiStreamReader.Read(); //Read header
-            _midiStreamReader.Read(); //Read start track
+            RepeatRead(2);
 
             //Act
 
-            var chunk = _midiStreamReader.Read() as TimeSignatureEvent;
+            var data = _midiStreamReader.Read() as TimeSignatureEvent;
 
             //Assert
 
-            Assert.IsInstanceOfType(chunk, typeof(TimeSignatureEvent));
-            Assert.AreEqual(MidiDataTypes.MetaEvent, chunk.MidiDataType);
-            Assert.AreEqual(4, chunk.TopNumber);
-            Assert.AreEqual(4, chunk.BottomNumber);
-            Assert.AreEqual(24, chunk.MidiClocksPerMetronome);
-            Assert.AreEqual(8, chunk.ThirtySecondNotesPerClock);
+            Assert.IsInstanceOfType(data, typeof(TimeSignatureEvent));
+            Assert.AreEqual(MidiDataTypes.MetaEvent, data.MidiDataType);
+            Assert.AreEqual(4, data.TopNumber);
+            Assert.AreEqual(4, data.BottomNumber);
+            Assert.AreEqual(24, data.MidiClocksPerMetronome);
+            Assert.AreEqual(8, data.ThirtySecondNotesPerClock);
 
         }
 
+        [TestMethod]
+        public void MidiStreamReader_FormatSpecification0_ReadTempo()
+        {
+
+            //Arrage
+
+            RepeatRead(3);
+
+            //Act
+
+            var data = _midiStreamReader.Read() as TempoEvent;
+
+            //Assert
+
+            Assert.IsInstanceOfType(data, typeof(TempoEvent));
+            Assert.AreEqual(MidiDataTypes.MetaEvent, data.MidiDataType);
+            Assert.AreEqual(120, data.Tempo);
+
+        }
+
+        [TestMethod]
+        public void MidiStreamReader_FormatSpecification0_ProgramChange()
+        {
+
+            //Arrage
+
+            RepeatRead(4);
+
+            //Act
+
+            var data = new ProgramChangeEvent[3];
+            data[0] = _midiStreamReader.Read() as ProgramChangeEvent;
+            data[1] = _midiStreamReader.Read() as ProgramChangeEvent;
+            data[2] = _midiStreamReader.Read() as ProgramChangeEvent;
+
+            //Assert
+
+            Assert.IsInstanceOfType(data[0], typeof(ProgramChangeEvent));
+            Assert.AreEqual(MidiDataTypes.MidiEvent, data[0].MidiDataType);
+            Assert.AreEqual(0, data[0].Channel);
+            Assert.AreEqual(MidiConstants.Instruments.ElectricPiano2, data[0].Instrument);
+
+            Assert.IsInstanceOfType(data[1], typeof(ProgramChangeEvent));
+            Assert.AreEqual(MidiDataTypes.MidiEvent, data[0].MidiDataType);
+            Assert.AreEqual(1, data[1].Channel);
+            Assert.AreEqual(MidiConstants.Instruments.OrchestralHarp, data[1].Instrument);
+
+            Assert.IsInstanceOfType(data[2], typeof(ProgramChangeEvent));
+            Assert.AreEqual(MidiDataTypes.MidiEvent, data[2].MidiDataType);
+            Assert.AreEqual(2, data[2].Channel);
+            Assert.AreEqual(MidiConstants.Instruments.Bassoon, data[2].Instrument);
+
+        }
     }
 }
