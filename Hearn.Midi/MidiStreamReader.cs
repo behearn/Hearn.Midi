@@ -158,6 +158,9 @@ namespace Hearn.Midi
                 case MidiEventConstants.META_EVENT_TIME_SIGNATURE:
                     return ReadTimeSignatureEvent(deltaTime);
 
+                case MidiEventConstants.META_EVENT_KEY_SIGNATURE:
+                    return ReadKeySignatureEvent(deltaTime);
+
                 case MidiEventConstants.META_EVENT_SET_TEMPO:
                     return ReadTempoEvent(deltaTime);
 
@@ -172,6 +175,9 @@ namespace Hearn.Midi
 
                 case MidiEventConstants.META_EVENT_END_OF_TRACK:
                     return ReadEndTrack(deltaTime);
+
+                case MidiEventConstants.META_EVENT_PORT:
+                    return ReadPortEvent(deltaTime);
 
                 default:
                     throw new NotImplementedException($"Meta Event {metaEventType} not implemented");
@@ -199,6 +205,27 @@ namespace Hearn.Midi
             timeSignatureEvent.ThirtySecondNotesPerClock = bytes[3];
 
             return timeSignatureEvent;
+
+        }
+
+        private KeySignatureEvent ReadKeySignatureEvent(long deltaTime)
+        {
+
+            var length = _stream.ReadByte();
+            if (length != 2)
+            {
+                throw new InvalidDataException($"Key signature event length incorrect (Expected 2 Actual {length}");
+            }
+
+            var bytes = new byte[length];
+            _stream.Read(bytes, 0, bytes.Length);
+
+            var keySignatureEvent = new KeySignatureEvent(deltaTime);
+
+            keySignatureEvent.SharpOrFlats = bytes[0];
+            keySignatureEvent.IsMinor = (bool)(bytes[1] == 1);
+
+            return keySignatureEvent;
 
         }
 
@@ -260,6 +287,24 @@ namespace Hearn.Midi
 
         }
 
+        private PortEvent ReadPortEvent(long deltaTime)
+        {
+
+            var length = _stream.ReadByte();
+            if (length != 1)
+            {
+                throw new InvalidDataException($"Port event length incorrect (Expected 1 Actual {length}");
+            }
+            
+            var port = (byte)_stream.ReadByte();
+
+            var portEvent = new PortEvent(deltaTime);
+            portEvent.Port = port;
+
+            return portEvent;
+
+        }
+
         private MidiEvent ReadMidiEvent(long deltaTime, byte midiEventCode)
         {
 
@@ -282,6 +327,10 @@ namespace Hearn.Midi
 
                 case MidiEventConstants.MIDI_EVENT_NOTE_OFF:
                     midiEvent = ReadNoteOffEvent(deltaTime, channel);
+                    break;
+
+                case MidiEventConstants.MIDI_EVENT_SYSEX:
+                    midiEvent = ReadSysExEvent(deltaTime, channel);
                     break;
 
                 default:
@@ -342,6 +391,21 @@ namespace Hearn.Midi
             noteOffEvent.Velocity = velocity;
 
             return noteOffEvent;
+
+        }
+
+        private SysExEvent ReadSysExEvent(long deltaTime, byte channel)
+        {
+
+            var length = _stream.ReadByte();
+
+            var data = new byte[length];
+            _stream.Read(data, 0, length);
+
+            var sysExEvent = new SysExEvent(deltaTime);
+            sysExEvent.Data = data;
+
+            return sysExEvent;
 
         }
 

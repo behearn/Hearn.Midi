@@ -14,6 +14,8 @@ namespace Hearn.Midi.MidiData
             StringEvent,
             TempoEvent,
             TimeSignatureEvent,
+            KeySignatureEvent,
+            PortEvent,
             EndTrackEvent
         }
 

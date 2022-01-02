@@ -20,14 +20,17 @@ namespace Hearn.Midi
         public const byte META_EVENT_MARKER = 0x06;
         public const byte META_EVENT_CUE_POINT = 0x07;
         //public const byte META_EVENT_CHANNEL_PREFIX = 0x20;
+        public const byte META_EVENT_PORT = 0x21;
         public const byte META_EVENT_END_OF_TRACK = 0x2F;
         public const byte META_EVENT_SET_TEMPO = 0x51;
         public const byte META_EVENT_TIME_SIGNATURE = 0x58;
+        public const byte META_EVENT_KEY_SIGNATURE = 0x59;
 
         //LSB for channel, use MIDI_EVENT_MASK to compare
         public const byte MIDI_EVENT_NOTE_OFF = 0x80;
         public const byte MIDI_EVENT_NOTE_ON = 0x90;
         public const byte MIDI_EVENT_PROGRAM_CHANGE = 0xC0;
+        public const byte MIDI_EVENT_SYSEX = 0xF0;
 
         //For use with META_EVENT_SET_TEMPO
         public const long MICROSECONDS_PER_MINUTE = 60000000;

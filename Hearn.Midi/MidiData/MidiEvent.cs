@@ -13,7 +13,8 @@ namespace Hearn.Midi.MidiData
         {
             ProgramChange,
             NoteOn,
-            NoteOff
+            NoteOff,
+            SysEx
         }
 
         private MidiEventTypes _midiEventType;
