@@ -317,16 +317,20 @@ namespace Hearn.Midi
 
             switch (midiEventType)
             {
-                case MidiEventConstants.MIDI_EVENT_PROGRAM_CHANGE:
-                    midiEvent = ReadProgramChangeEvent(deltaTime, channel);
+                case MidiEventConstants.MIDI_EVENT_NOTE_OFF:
+                    midiEvent = ReadNoteOffEvent(deltaTime, channel);
                     break;
 
                 case MidiEventConstants.MIDI_EVENT_NOTE_ON:
                     midiEvent = ReadNoteOnEvent(deltaTime, channel);
                     break;
 
-                case MidiEventConstants.MIDI_EVENT_NOTE_OFF:
-                    midiEvent = ReadNoteOffEvent(deltaTime, channel);
+                case MidiEventConstants.MIDI_EVENT_CONTROLLER:
+                    midiEvent = ReadControllerEvent(deltaTime, channel);
+                    break;
+
+                case MidiEventConstants.MIDI_EVENT_PROGRAM_CHANGE:
+                    midiEvent = ReadProgramChangeEvent(deltaTime, channel);
                     break;
 
                 case MidiEventConstants.MIDI_EVENT_SYSEX:
@@ -359,6 +363,22 @@ namespace Hearn.Midi
             programChangeEvent.Instrument = (MidiConstants.Instruments)(intstrument);
 
             return programChangeEvent;
+
+        }
+
+        private ControllerEvent ReadControllerEvent(long deltaTime, byte channel)
+        {
+
+            var bytes = new byte[2];
+            _stream.Read(bytes, 0, bytes.Length);
+
+            var controllerEvent = new ControllerEvent(deltaTime);
+
+            controllerEvent.Channel = channel;
+            controllerEvent.Controller = (MidiConstants.ControllerTypes)bytes[0];
+            controllerEvent.Value = bytes[1];
+
+            return controllerEvent;
 
         }
 

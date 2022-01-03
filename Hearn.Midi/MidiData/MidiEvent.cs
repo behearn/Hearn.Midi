@@ -11,10 +11,11 @@ namespace Hearn.Midi.MidiData
 
         public enum MidiEventTypes
         {
-            ProgramChange,
-            NoteOn,
-            NoteOff,
-            SysEx
+            NoteOff = 0x80,
+            NoteOn = 0x90,
+            Controller = 0xB0,
+            ProgramChange = 0xC0,
+            SysEx = 0xF0
         }
 
         private MidiEventTypes _midiEventType;
