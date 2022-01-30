@@ -1,4 +1,5 @@
-﻿using Hearn.Midi.Models;
+﻿using Hearn.Midi.Extensions;
+using Hearn.Midi.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -225,6 +226,31 @@ namespace Hearn.Midi.Tests.MidiStreamWriterTests
             //Assert           
 
             Assert.AreEqual(msw, _midiStreamWriter);
+
+        }
+
+        [TestMethod]
+        public void MidiStreamWriter_Tick_MultipleTicksStack()
+        {
+
+            //Arrange
+
+            _midiStreamWriter
+                .WriteStartTrack();
+                
+            //Act
+
+            _midiStreamWriter
+                .Tick(NoteDurations.QuarterNote)
+                .Tick(NoteDurations.QuarterNote)
+                .WriteNote(0, MidiNoteNumbers.C4, 127, NoteDurations.QuarterNote);
+            
+            //Assert           
+
+            _stream.Seek(-5, SeekOrigin.End);
+
+            var delta = _stream.ReadVariableLengthQuantity();
+            Assert.AreEqual(192, delta);
 
         }
 

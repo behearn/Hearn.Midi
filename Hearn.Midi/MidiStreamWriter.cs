@@ -569,7 +569,14 @@ namespace Hearn.Midi
         /// <returns>Current MidiStreamWriter instance</returns>
         public MidiStreamWriter Tick(long duration)
         {
-            _awaitedTick = _currentTick + duration;
+            if (_awaitedTick < _currentTick)
+            {
+                _awaitedTick = _currentTick + duration;
+            }
+            else
+            {
+                _awaitedTick += duration;
+            }
             StopPlayedNotes();
 
             return this;
