@@ -648,7 +648,7 @@ namespace Hearn.Midi
         };
 
         //https://www.midi.org/specifications-old/item/table-3-control-change-messages-data-bytes-2
-        public enum ControllerTypes
+        public enum ControlChangeTypes
         {
             BankSelectMSB = 0x00,
             ModulationWheelOrLeverMSB = 0x01,
@@ -741,11 +741,11 @@ namespace Hearn.Midi
             HighResolutionVelocityPrefix = 0x58,
             Undefined020 = 0x59,
             Undefined021 = 0x5A,
-            Undefined022 = 0x5B,
-            Effects2Depth = 0x5C,
-            Undefined = 0x5D,
-            Effects4Depth = 0x5E,
-            Effects5Depth = 0x5F,
+            Effects1Reverb = 0x5B,
+            Effects2Tremelo = 0x5C,
+            Effects3Chorus = 0x5D,
+            Effects4Detuning = 0x5E,
+            Effects5Phaser = 0x5F,
             DataIncrement = 0x60,
             DataDecrement = 0x61,
             NonRegisteredParameterNumberLSB = 0x62,
@@ -779,5 +779,6 @@ namespace Hearn.Midi
             ChannelModeMessageMonoModeOn = 0x7E,
             ChannelModeMessagePolyModeOn = 0x7F
         };
+
     }
 }

@@ -17,13 +17,13 @@ namespace Hearn.Midi.MidiData
 
         public int Channel { get; set; }
 
-        public ControllerTypes Controller { get; set; }
+        public ControlChangeTypes ControlChangeType { get; set; }
 
         public byte Value { get; set; }
 
         public override string ToString()
         {
-            return $"Controller Delta {Delta} Channel {Channel} Controller {Controller.ToString()} Value {Value}";
+            return $"Control change Delta {Delta} Channel {Channel} ControlChangeTy[r {ControlChangeType.ToString()} Value {Value}";
         }
 
     }

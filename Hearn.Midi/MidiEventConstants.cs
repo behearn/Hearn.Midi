@@ -29,7 +29,7 @@ namespace Hearn.Midi
         //LSB for channel, use MIDI_EVENT_MASK to compare
         public const byte MIDI_EVENT_NOTE_OFF = 0x80;
         public const byte MIDI_EVENT_NOTE_ON = 0x90;
-        public const byte MIDI_EVENT_CONTROLLER = 0xB0;
+        public const byte MIDI_EVENT_CONTROL_CHANGE = 0xB0;
         public const byte MIDI_EVENT_PROGRAM_CHANGE = 0xC0;
         public const byte MIDI_EVENT_SYSEX = 0xF0;
 

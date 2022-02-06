@@ -553,6 +553,46 @@ namespace Hearn.Midi
         }
 
         /// <summary>
+        /// Writes a control change event to the supplied channgel
+        /// </summary>
+        /// <param name="channel">channel number [0..15] (Note: channel 10 ([9]) is reserved for percussion)</param>
+        /// <param name="controlChangeType">Control Type</param>
+        /// <param name="value">value in the range [0..127]</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        public MidiStreamWriter WriteControlChange(byte channel, ControlChangeTypes controlChangeType, byte value)
+        {
+
+            if (_currentTrack == -1)
+            {
+                throw new InvalidOperationException("WriteControlChange must be called after WriteStartTrack");
+            }
+
+            if (channel < 0 || channel > 15)
+            {
+                throw new ArgumentException("channel must be in the range 0..15");
+            }
+
+            if (value < 0 || value > 127)
+            {
+                throw new ArgumentException("value must be in the range 0..127");
+            }
+
+            var deltaTime = CalculateDelta();
+
+            var eventCode = (byte)(MIDI_EVENT_CONTROL_CHANGE | channel);
+
+            _stream.WriteVariableLengthQuantity(deltaTime);
+            _stream.WriteByte(eventCode);
+            _stream.WriteByte((byte)controlChangeType);
+            _stream.WriteByte(value);
+
+            return this;
+
+        }
+
+        /// <summary>
         /// Updates the current time of the track by a NoteDuration, stopping any playing notes due to end
         /// </summary>
         /// <param name="duration">length of time to tick over</param>
