@@ -1,7 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Description>A .net MIDI file implementation</Description>
+    <Copyright>Brian Hearn 2022</Copyright>
+    <PackageProjectUrl>https://github.com/behearn/Hearn.Midi</PackageProjectUrl>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/behearn/Hearn.Midi</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>MIDI</PackageTags>
+    <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+    <Company>brianhearn.com</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\Readme.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
