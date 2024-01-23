@@ -50,7 +50,7 @@ namespace Hearn.Midi
             EighthNote = 48,
 
             QuaverDotted = 72,
-            EighthNoteDotted = 73,
+            EighthNoteDotted = 72,
 
             Crotchet = 96,
             QuarterNote = 96,
